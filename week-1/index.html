@@ -25,11 +25,11 @@
   </header>
 
   <main>
-    <p>This week we built the first working version of Resolve UK. You can try it yourself at <a href="https://resolve-uk-ten.vercel.app/" target="_blank" rel="noopener">resolve-uk-ten.vercel.app</a>. Open it on a phone, report a problem with a photo and a location, and it appears in a list with its status.</p>
+    <p>This week I built the first working version of Resolve UK. You can try it yourself at <a href="https://resolve-uk-ten.vercel.app/" target="_blank" rel="noopener">resolve-uk-ten.vercel.app</a>. Open it on a phone, report a problem with a photo and a location, and it appears in a list with its status.</p>
 
-    <p>Everything so far comes from our own reading of the pitch deck, not from a process you've confirmed. The reporting loop (send in a problem, see what happened to it) works whichever way the rest turns out, so it was a safe place to start. Before we build further into routing and fixes, we'd like to understand how you expect those parts to work. Our questions are at the end.</p>
+    <p>Everything so far comes from my own reading of the pitch deck, not from a process you've confirmed. The reporting loop (send in a problem, see what happened to it) works whichever way the rest turns out, so it was a safe place to start. Before I build further into routing and fixes, I'd like to understand how you expect those parts to work. My questions are at the end.</p>
 
-    <h2>What we built</h2>
+    <h2>What I built</h2>
     <p>Four things are in place.</p>
     <ul>
       <li>It works like an app on a phone. Open the website, choose "Add to Home Screen", and it sits alongside your other apps. There's nothing to download from an app store.</li>
@@ -39,35 +39,35 @@
     </ul>
 
     <h2>What comes next</h2>
-    <p>We see five stages, building outward from this first one towards the platform described in the pitch deck.</p>
+    <p>I see five stages, building outward from this first one towards the platform described in the pitch deck.</p>
     <ol>
       <li>Reporting basics. This is what you can try today.</li>
-      <li>A feed instead of a list. Each report would be shown like a post on a social timeline, with the outcome beside it once there is one, so you see the problem and the fix together. We'd also add a light way for people to see their own reports without a full login, and let a report sent with no signal go through once the signal returns.</li>
+      <li>A feed instead of a list. Each report would be shown like a post on a social timeline, with the outcome beside it once there is one, so you see the problem and the fix together. I'd also add a light way for people to see their own reports without a full login, and let a report sent with no signal go through once the signal returns.</li>
       <li>AI help with sorting. The app would suggest the type of problem from the photo, and how urgent it looks, instead of relying on the dropdown.</li>
       <li>Sending reports to the right council, and checking fixes. Reports go to the responsible local authority, and AI helps confirm that a fix really happened before a report is marked resolved.</li>
       <li>Public dashboards. Comparisons of how different councils perform, and access for councils, housing associations and waste operators.</li>
     </ol>
 
     <h2>Things to be aware of</h2>
-    <p>These are the trade-offs we made to move quickly this week, roughly in order of importance. None of them stops us continuing, but they're worth deciding on deliberately before this becomes a pilot.</p>
+    <p>These are the trade-offs I made to move quickly this week, roughly in order of importance. None of them stops me continuing, but they're worth deciding on deliberately before this becomes a pilot.</p>
     <ul>
-      <li>Reports are public and there's no login. Anyone who opens the app sees every report, not just their own, and anyone with the link can submit one. That's fine for testing, but we need a proper way to control access before wider use.</li>
-      <li>The app needs an internet connection. Being installable doesn't mean it works offline. It can't send or show reports without a signal, which matters in places like rural fly-tipping spots. Fixing that means saving reports on the phone and sending them later, and we plan to do it in stage 2.</li>
-      <li>We haven't decided where the data should live. The database was set up in whichever region was quickest, which isn't necessarily the UK or EU. Moving it later means rebuilding it, so this should be settled before any real citizen data is collected.</li>
-      <li>We're on a free hosting plan. It's fine for a prototype, but it pauses after a week of inactivity and has limits on storage and traffic. A pilot with real users will need a paid plan.</li>
+      <li>Reports are public and there's no login. Anyone who opens the app sees every report, not just their own, and anyone with the link can submit one. That's fine for testing, but access needs to be controlled properly before wider use.</li>
+      <li>The app needs an internet connection. Being installable doesn't mean it works offline. It can't send or show reports without a signal, which matters in places like rural fly-tipping spots. Fixing that means saving reports on the phone and sending them later, and I plan to do it in stage 2.</li>
+      <li>I haven't decided where the data should live. The database was set up in whichever region was quickest, which isn't necessarily the UK or EU. Moving it later means rebuilding it, so this should be settled before any real citizen data is collected.</li>
+      <li>The prototype is on a free hosting plan. It's fine for a prototype, but it pauses after a week of inactivity and has limits on storage and traffic. A pilot with real users will need a paid plan.</li>
       <li>Nobody checks the photos. Once reports are visible to others, and especially once the feed becomes the main view, inappropriate, duplicate or irrelevant photos become a real question. Storage cost grows with volume too.</li>
       <li>Placing a pin by hand is less exact than GPS. If someone declines to share their location they tap the map instead. That works for now, but it will matter once a report has to be matched to the right council's boundary.</li>
-      <li>The status never moves on from "Reported". That's intentional at this stage, because no council is connected yet to update it. We mention it so it isn't mistaken for a fault.</li>
+      <li>The status never moves on from "Reported". That's intentional at this stage, because no council is connected yet to update it. I'm mentioning it so it isn't mistaken for a fault.</li>
     </ul>
 
-    <h2>Questions we asked</h2>
-    <p>You replied on 19 September, and your answers are reflected in the <a href="../blueprint/">Blueprint</a>. For the record, these are the five questions we asked.</p>
+    <h2>Questions I asked</h2>
+    <p>You replied on 19 September, and your answers are reflected in the <a href="../blueprint/">Blueprint</a>. For the record, these are the five questions I asked.</p>
     <ol class="questions">
-      <li>How should a report reach the people who act on it: a dashboard our team checks by hand, or a link into a system a council already uses?</li>
-      <li>Who deals with these reports today, and is there an existing process or contact we should work with?</li>
+      <li>How should a report reach the people who act on it: a dashboard checked by hand, or a link into a system a council already uses?</li>
+      <li>Who deals with these reports today, and is there an existing process or contact I should work with?</li>
       <li>What counts as resolved, and who decides?</li>
-      <li>Is there a specific council or area we should design the first version around?</li>
-      <li>Are there existing commitments about how data is handled that we need to follow?</li>
+      <li>Is there a specific council or area I should design the first version around?</li>
+      <li>Are there existing commitments about how data is handled that I need to follow?</li>
     </ol>
   </main>
 

@@ -38,18 +38,18 @@
   <main>
 
     <h2 id="summary" style="margin-top:0">Summary</h2>
-    <p>This is our plan for taking Resolve UK from the working prototype to something councils can actually use. It covers how a report travels from a photo on someone's phone to a confirmed fix, what we would build and in what order, and a few questions we need your help with before going further.</p>
-    <p>It's based on the answers you sent after the Week 1 report. Nothing described here has been built yet, so please read it as a draft. If something is wrong or missing, tell us and we'll change the plan before we build.</p>
+    <p>This is my plan for taking Resolve UK from the working prototype to something councils can actually use. It covers how a report travels from a photo on someone's phone to a confirmed fix, what I would build and in what order, and a few questions I need your help with before going further.</p>
+    <p>It's based on the answers you sent after the Week 1 report. Nothing described here has been built yet, so please read it as a draft. If something is wrong or missing, tell me and I'll change the plan before I build.</p>
     <p>In short:</p>
     <ul>
       <li>A resident reports a problem. Staff at the responsible council update its progress. Residents, helped by a photo-checking tool, confirm whether it was really fixed.</li>
-      <li>We would start with a safe home for the data and a dashboard for whoever handles reports. The first three stages come to about 4 to 7.5 weeks of work.</li>
-      <li>Anything involving a council depends on finding one that will take part, and we can't put a date on that yet.</li>
+      <li>I would start with a safe home for the data and a dashboard for whoever handles reports. The first three stages come to about 4 to 7.5 weeks of work.</li>
+      <li>Anything involving a council depends on finding one that will take part, and I can't put a date on that yet.</li>
     </ul>
-    <p>The time estimates are rough guesses. Prices, licence terms and which council covers what also still need checking before we rely on them.</p>
+    <p>The time estimates are rough guesses. Prices, licence terms and which council covers what also still need checking before I rely on them.</p>
 
     <h2 id="moves">How a report moves</h2>
-    <p>Every report goes through the same set of stages. The middle ones are the stages you described: reported, responsible body identified, acknowledged, clearance scheduled, cleared and outcome verified. We've added three for when things don't go smoothly: duplicate, rejected and reopened.</p>
+    <p>Every report goes through the same set of stages. The middle ones are the stages you described: reported, responsible body identified, acknowledged, clearance scheduled, cleared and outcome verified. I've added three for when things don't go smoothly: duplicate, rejected and reopened.</p>
 
     <figure>
       <pre class="mermaid">
@@ -75,14 +75,14 @@ stateDiagram-v2
       <figcaption>Figure 1. The stages a report can move through.</figcaption>
     </figure>
 
-    <p>One distinction matters more than the rest. When a council marks a job as cleared, that's the council's own word. A report only becomes verified when someone independent, such as a resident or our photo check, agrees that it's fixed. Keeping those two apart is what lets us say how many fixes are genuinely confirmed.</p>
+    <p>One distinction matters more than the rest. When a council marks a job as cleared, that's the council's own word. A report only becomes verified when someone independent, such as a resident or the photo check, agrees that it's fixed. Keeping those two apart is what makes it possible to say how many fixes are genuinely confirmed.</p>
 
     <div class="table-wrap">
       <table>
         <thead><tr><th>Stage</th><th>What it means</th><th>Who sets it</th></tr></thead>
         <tbody>
           <tr><td>Reported</td><td>Someone has sent it in.</td><td>The resident</td></tr>
-          <tr><td>Responsible body identified</td><td>We know which council should deal with it.</td><td>Set automatically, or by staff</td></tr>
+          <tr><td>Responsible body identified</td><td>The system knows which council should deal with it.</td><td>Set automatically, or by staff</td></tr>
           <tr><td>Acknowledged</td><td>The council has seen it.</td><td>Council staff</td></tr>
           <tr><td>Clearance scheduled</td><td>A date for the work is set.</td><td>Council staff</td></tr>
           <tr><td>Cleared</td><td>The council says the job is done.</td><td>Council staff</td></tr>
@@ -131,12 +131,12 @@ flowchart TD
       <figcaption>Figure 2. What happens when someone sends in a report.</figcaption>
     </figure>
 
-    <p>Before the report is saved, the app looks for an open report of the same type nearby and asks the person whether it's the same problem. If it is, their report is added to the existing one instead of creating a duplicate. We ask rather than merge automatically, because a wrong guess would hide a genuine second problem. We'd start with a distance of about 10 to 20 metres for potholes and 25 to 50 metres for other problems, then adjust once we see real reports.</p>
-    <p>The system then works out which council is responsible from the location and the type of problem. Location alone isn't always enough. In areas with two levels of council, the county usually looks after potholes and the district looks after fly-tipping. We'll confirm who covers what in the pilot area before relying on this.</p>
+    <p>Before the report is saved, the app looks for an open report of the same type nearby and asks the person whether it's the same problem. If it is, their report is added to the existing one instead of creating a duplicate. I'd ask rather than merge automatically, because a wrong guess would hide a genuine second problem. I'd start with a distance of about 10 to 20 metres for potholes and 25 to 50 metres for other problems, then adjust once real reports come in.</p>
+    <p>The system then works out which council is responsible from the location and the type of problem. Location alone isn't always enough. In areas with two levels of council, the county usually looks after potholes and the district looks after fly-tipping. I'll confirm who covers what in the pilot area before relying on this.</p>
     <p>It also suggests a category from the photo. If it isn't confident, the report is flagged for a person to look at.</p>
 
     <h2 id="checking">Checking a fix</h2>
-    <p>When a council marks a report as cleared, we ask the person who reported it, and anyone who backed the report, whether it's really fixed. A new photo helps. A photo-comparison tool can look at the before and after pictures, but it only advises. It gives one of three answers: likely fixed, possibly not fixed, or needs a person to look.</p>
+    <p>When a council marks a report as cleared, the app asks the person who reported it, and anyone who backed the report, whether it's really fixed. A new photo helps. A photo-comparison tool can look at the before and after pictures, but it only advises. It gives one of three answers: likely fixed, possibly not fixed, or needs a person to look.</p>
 
     <figure>
       <pre class="mermaid">
@@ -162,10 +162,10 @@ sequenceDiagram
       <figcaption>Figure 3. How a fix gets checked.</figcaption>
     </figure>
 
-    <p>Our draft rule is that a report becomes verified when the council has said cleared and at least one independent confirmation agrees. If the evidence says the problem is still there, the report reopens and the council is told. If nobody responds, it stays as cleared but unverified, and is counted that way, so the verification figures stay honest. How many confirmations we need is one of the decisions that can wait.</p>
+    <p>My draft rule is that a report becomes verified when the council has said cleared and at least one independent confirmation agrees. If the evidence says the problem is still there, the report reopens and the council is told. If nobody responds, it stays as cleared but unverified, and is counted that way, so the verification figures stay honest. How many confirmations it takes is one of the decisions that can wait.</p>
 
     <h2 id="measuring">Measuring results</h2>
-    <p>Every change of stage is saved with the time it happened. That's what lets us work out the figures in your benchmarking example. For instance:</p>
+    <p>Every change of stage is saved with the time it happened. That's what makes it possible to work out the figures in your benchmarking example. For instance:</p>
     <ul>
       <li>The median time to clear a fly-tip, for each council.</li>
       <li>The share of reports cleared within five days.</li>
@@ -175,7 +175,7 @@ sequenceDiagram
     <p>Hotspot maps and trends come later, once there's enough data for them to mean something.</p>
 
     <h2 id="order">Order of work</h2>
-    <p>We'd build in stages, each on top of the one before.</p>
+    <p>I'd build in stages, each on top of the one before.</p>
 
     <div class="table-wrap">
       <table>
@@ -186,12 +186,12 @@ sequenceDiagram
           <tr><td>Staff dashboard</td><td>Sign-in for staff, a list, map and filters for each council's area, and buttons to update a report's stage.</td><td>20 to 35</td><td>2 to 3.5 weeks</td></tr>
           <tr><td>AI help</td><td>Suggested categories with a confidence level, checked by staff. Needs extra time to tune on real reports.</td><td>10 to 20</td><td>1 to 2 weeks</td></tr>
           <tr><td>Routing and checking fixes</td><td>Automatic routing to the right council for the pilot area, requests to confirm a fix, and the verification rule.</td><td>25 to 45</td><td>2.5 to 4.5 weeks</td></tr>
-          <tr><td>Comparing councils</td><td>Public comparison pages. Needs months of real data first, so we haven't sized it.</td><td>Later</td><td>Later</td></tr>
+          <tr><td>Comparing councils</td><td>Public comparison pages. Needs months of real data first, so I haven't sized it.</td><td>Later</td><td>Later</td></tr>
         </tbody>
       </table>
     </div>
 
-    <p>The first three stages come to roughly 40 to 75 hours, or 4 to 7.5 weeks. With AI help it's 50 to 95 hours, or 5 to 9.5 weeks. These are rough guesses and could be out by half again either way. They assume about 10 hours a week on Resolve UK, because our time is shared with Celestial Companions. The routing stage also depends on a council taking part, so no number of hours can promise it.</p>
+    <p>The first three stages come to roughly 40 to 75 hours, or 4 to 7.5 weeks. With AI help it's 50 to 95 hours, or 5 to 9.5 weeks. These are rough guesses and could be out by half again either way. They assume about 10 hours a week on Resolve UK, because my time is shared with Celestial Companions. The routing stage also depends on a council taking part, so no number of hours can promise it.</p>
 
     <figure>
       <div class="chart">
@@ -227,31 +227,34 @@ sequenceDiagram
     <p>Sorry, that section was too technical. It just means what's finished and working. You can open the prototype on a phone, report a problem with a photo and a location, and see it show up in a list. I've rewritten it in plain language in the <a href="../week-1/">Week 1 report</a>.</p>
 
     <h3>What are the timing requirements for the next steps?</h3>
-    <p>I can't give firm dates yet, but the first three stages should take about 4 to 7.5 weeks, or up to 9.5 with the AI part. That's at about 10 hours a week on Resolve UK, because my time is split with Celestial Companions. If you'd rather one of the two came first, tell me and I'll adjust. Anything that needs a council can't be dated until we have one. The full breakdown is under <a href="#order">Order of work</a>.</p>
+    <p>I can't give firm dates yet, but the first three stages should take about 4 to 7.5 weeks, or up to 9.5 with the AI part. That's at about 10 hours a week on Resolve UK, because my time is split with Celestial Companions. If you'd rather one of the two came first, tell me and I'll adjust. Anything that needs a council can't be dated until one is on board. The full breakdown is under <a href="#order">Order of work</a>.</p>
 
     <h3>Where is the data, and what would it take to move it?</h3>
     <p>At the moment it's in Seoul, South Korea. I picked that region for convenience while building, and it only holds test reports. It needs to move to the UK or EU before any real reports come in. UK law doesn't ban storing data abroad, but it adds extra requirements, and councils will most likely ask for UK or EU hosting.</p>
     <p>Moving now is easy because there's nothing real to move. It's about an hour or two of work and costs nothing extra. Doing it later, with real reports and photos in the database, is harder and riskier. So I'd do it first, in London if I can or otherwise elsewhere in the EU, and set it up under an account that can be handed over to you or your organisation. I'm also changing how photos are stored so a later move can't break their links.</p>
 
     <h3>What happens when the free usage runs out, and what does it cost?</h3>
-    <p>The prototype runs on free plans for the database and photos (Supabase) and for the website (Vercel). Photo storage would run out first. The free plan has about 1 GB, and full-size phone photos are 3 to 5 MB each, so that's a few hundred reports. Shrinking photos when they're uploaded fixes most of that. If we did hit the limit, uploads could stop working, so I'd upgrade before then.</p>
-    <p>The paid plans are roughly $25 a month for Supabase and $20 a month for Vercel, so about $45 a month for a pilot, plus the cost of the AI features once we know how many reports to expect. Vercel's free plan is meant for non-commercial use, so a real pilot should be on the paid one anyway. Those are the prices as I know them. I'll check the current ones before the pilot.</p>
+    <p>The prototype runs on free plans for the database and photos (Supabase) and for the website (Vercel). Photo storage would run out first. The free plan has about 1 GB, and full-size phone photos are 3 to 5 MB each, so that's a few hundred reports. Shrinking photos when they're uploaded fixes most of that. If the limit were hit, uploads could stop working, so I'd upgrade before then.</p>
+    <p>The paid plans are roughly $25 a month for Supabase and $20 a month for Vercel, so about $45 a month for a pilot, plus the cost of the AI features once I know how many reports to expect. Vercel's free plan is meant for non-commercial use, so a real pilot should be on the paid one anyway. Those are the prices as I know them. I'll check the current ones before the pilot.</p>
 
     <h3>Can you match a report's location to others nearby, to stop duplicates?</h3>
-    <p>Yes. Before a report is saved, the app can check for an open report of the same type nearby and ask the person whether it's the same problem. I'd ask rather than merge automatically, because a wrong guess could hide a real second problem. The distance is still to be decided. I'd start at about 10 to 20 metres for potholes and 25 to 50 for other problems, then adjust once we see real reports. It also gives you the shared view of an incident that you described. <a href="#sending">Sending in a report</a> shows where it fits.</p>
+    <p>Yes. Before a report is saved, the app can check for an open report of the same type nearby and ask the person whether it's the same problem. I'd ask rather than merge automatically, because a wrong guess could hide a real second problem. The distance is still to be decided. I'd start at about 10 to 20 metres for potholes and 25 to 50 for other problems, then adjust once real reports come in. It also gives you the shared view of an incident that you described. <a href="#sending">Sending in a report</a> shows where it fits.</p>
 
     <h3>Surely most people have GPS on?</h3>
     <p>You're right that most phones have it and most people will allow it, so most locations will be fine. I'd still keep the manual pin, for a few reasons. GPS is only accurate to about 5 to 20 metres, and worse between tall buildings. People often report later from home, when the phone's location is their house. And some people will be on a computer or will say no to location sharing. So the app uses GPS first, lets people correct it, and records how accurate it was. It's a small risk, not a big one.</p>
 
+    <h3>Which area would you suggest for the first pilot?</h3>
+    <p>I'd suggest Huddersfield as the simplest place to start. One council covers potholes, fly-tipping and the rest there, so reports have one place to go. In Nottinghamshire the work is split between the county council and the district councils, and East Anglia covers many councils, so both would take more work to set up. I still need to check this, and any of the three needs a council that's willing to take part.</p>
+
     <h2 id="questions">Questions for Ms Kay</h2>
-    <p>Three questions would help us most.</p>
+    <p>Three questions would help me most.</p>
     <ol class="questions">
       <li>Who will check the dashboard at the start, and who marks a report as cleared: your team or the council's staff?
-        <span class="why">This tells us who needs a login.</span></li>
+        <span class="why">This tells me who needs a login.</span></li>
       <li>How do you plan to approach a council, and do you have a contact or a way in?
         <span class="why">Reports only get fixed if a council takes part.</span></li>
-      <li>Of East Anglia, Nottinghamshire and Huddersfield, which is easiest for you to visit and test in person?
-        <span class="why">We think Huddersfield may be simplest, because one council covers everything there, but we still need to check that. We'd like to hear what works for you.</span></li>
+      <li>What is the plan for testing Resolve UK?
+        <span class="why">This helps me decide where to start.</span></li>
     </ol>
 
     <h3>Smaller decisions that can wait</h3>
@@ -259,7 +262,7 @@ sequenceDiagram
       <li>Should photos appear publicly straight away, or be checked first? They can show faces and number plates.</li>
       <li>Should people who report need an account, or is anonymous fine?</li>
       <li>How many confirmations should it take to count a fix as verified?</li>
-      <li>How long should we keep reports and photos?</li>
+      <li>How long should reports and photos be kept?</li>
       <li>If Resolve UK and Celestial Companions compete for time, which comes first?</li>
     </ul>
 
