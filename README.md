@@ -35,30 +35,48 @@ from a CDN, so it needs an internet connection to draw its diagrams.
 2. Edit its `index.html`. The page links to `../assets/site.css` and `../assets/site.js`, so keep it one folder deep.
 3. Add an entry for it to the root `index.html`.
 
-## Comments
+## Comments (Supabase)
 
-The blueprint page has reply boxes under each question for Ms Kay and a general
-comments area at the end. They are switched off, and invisible, until a
-Supabase project is connected. Comments are private: only invited people can
-sign in, and only signed-in people can read or write.
+The blueprint has an answer box under each of the questions for Ms Kay, a box for the
+smaller decisions, and a comments box at the end. The Week 1 report has a box under
+each of its questions and a comments box too. They save to a small Supabase database,
+so Ms Kay can answer from the page and you can read and reply to everything in one
+place. A static website can't store anything by itself, which is why a database is needed.
 
-1. Create a Supabase project in a UK or EU region, under the project's own account.
-2. In the SQL editor, run `supabase/comments.sql`.
-3. Under Authentication, keep the Email provider on and switch off "Allow new users to sign up". Then invite Ms Kay's email and your own under Users.
-4. Under Authentication, URL Configuration, set the Site URL to the deployed address and add the blueprint page (for example `https://your-site.vercel.app/blueprint/`) to the Redirect URLs. Add `http://localhost:8000/blueprint/` too if testing locally.
-5. Put the project URL and the publishable key in `assets/config.js`. The publishable key is meant to be public. Never put a secret key there.
+The database is already set up. The `reports_site_comments` table and the two functions
+that read and save answers (`get_my_site_comments` and `save_my_site_comment`) were created
+by `supabase/schema.sql` in the Celestial Companions reports repository. That file does not
+need to be run again, and this repository does not contain a copy. The project URL and the
+public key are in `assets/comments-config.js`. The key is meant to be public. Never put the
+`service_role` key in this repository.
 
-To see how the boxes look before Supabase is connected, add `?preview=comments`
-to the blueprint address. It shows working boxes, but nothing typed there is
-saved, and normal visitors never see it.
+Each page labels its answers with its own key (`data-report` on the script tag), so the two
+report sites and both pages share one table without mixing:
 
-To read comments outside the site, open the `comments` table in the Supabase
-table editor. Comments cannot be edited or deleted from the site itself.
+| Page | Key |
+|---|---|
+| `/blueprint/` | `resolve-blueprint` |
+| `/week-1/` | `resolve-week-1` |
 
-Free Supabase projects pause after a week of inactivity, and comments will not
-load until the project is restored from its dashboard. The shared sender that
-Supabase uses for sign-in emails is limited and can land in spam. Both are fine
-for a couple of people, but worth fixing before wider use.
+Filter by the `report` column in the Table Editor to see one page at a time.
+
+How a box behaves: it starts as an empty input. After she saves, the input is replaced by
+what she wrote. The pen icon, or a double-click on the text, turns it back into an input with
+Save and Cancel (Esc also cancels). Each reader gets one answer per box, and changing it
+updates that row. The `updated_at` column shows when it was last edited.
+
+Reading and replying: open Table Editor > `reports_site_comments`. Every answer and
+comment is a row. To reply, type into that row's `reply` cell; the reply appears under her
+answer on the page the next time she opens it.
+
+How it stays private: nobody can read or write the table directly. Each browser makes up a
+private random id, and the page can only save and fetch answers under that id, through the
+two functions. So Ms Kay sees her own answers (and your replies) on the device she wrote
+them on, and no one else's. If she switches device she will not see her earlier answers
+there, though you still will.
+
+Until the two values in `assets/comments-config.js` are filled in, the boxes still show but
+are greyed out and marked "Preview only: saving is not switched on yet."
 
 ## License
 

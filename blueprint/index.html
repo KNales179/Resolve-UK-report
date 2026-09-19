@@ -11,7 +11,7 @@
 <link rel="stylesheet" href="../assets/site.css">
 <script src="../assets/site.js"></script>
 </head>
-<body data-page="blueprint">
+<body>
 <div class="wrap">
 
   <div class="topbar">
@@ -31,8 +31,9 @@
       <a href="#order">Order of work</a> &middot;
       <a href="#leads">Where this leads</a> &middot;
       <a href="#answers">Your questions</a> &middot;
+      <a href="#appendix">Technical appendix</a> &middot;
       <a href="#questions">Questions for Ms Kay</a> &middot;
-      <a href="#appendix">Technical appendix</a>
+      <a href="#comments">Comments</a>
     </p>
   </header>
 
@@ -270,32 +271,8 @@ sequenceDiagram
     <h3>Which area would you suggest for the first pilot?</h3>
     <p>I'd suggest Huddersfield as the simplest place to start. One council covers potholes, fly-tipping and the rest there, so reports have one place to go. In Nottinghamshire the work is split between the county council and the district councils, and East Anglia covers many councils, so both would take more work to set up. I still need to check this, and any of the three needs a council that's willing to take part.</p>
 
-    <h2 id="questions">Questions for Ms Kay</h2>
-    <p>Three questions would help me most.</p>
-    <ol class="questions">
-      <li>Who will check the dashboard at the start, and who marks a report as cleared: your team or the council's staff?
-        <span class="why">This tells me who needs a login.</span>
-        <div class="thread" data-thread="q1"></div></li>
-      <li>How do you plan to approach a council, and do you have a contact or a way in?
-        <span class="why">Reports only get fixed if a council takes part.</span>
-        <div class="thread" data-thread="q2"></div></li>
-      <li>What is the plan for testing Resolve UK?
-        <span class="why">This helps me decide where to start.</span>
-        <div class="thread" data-thread="q3"></div></li>
-    </ol>
-
-    <h3>Smaller decisions that can wait</h3>
-    <ul>
-      <li>Should photos appear publicly straight away, or be checked first? They can show faces and number plates.</li>
-      <li>Should people who report need an account, or is anonymous fine?</li>
-      <li>How many confirmations should it take to count a fix as verified?</li>
-      <li>How long should reports and photos be kept?</li>
-      <li>If Resolve UK and Celestial Companions compete for time, which comes first?</li>
-    </ul>
-    <div class="thread" data-thread="decisions"></div>
-
     <h2 id="appendix">Technical appendix</h2>
-    <p>This part is for whoever builds or takes over the system. Everyone else can skip it.</p>
+    <p>This part is for whoever builds or takes over the system. Everyone else can skip straight to the <a href="#questions">questions</a> at the end.</p>
 
     <h3>How the pieces connect</h3>
     <figure>
@@ -396,7 +373,34 @@ erDiagram
       <li>There is a list of every third-party service used, with what it costs and who pays.</li>
     </ul>
 
-    <div class="thread" data-thread="general" data-title="Comments"></div>
+    <h2 id="questions">Questions for Ms Kay</h2>
+    <p>Three questions would help me most. Type your answer under each one. You can change it later by clicking the pen icon, or by double-clicking your answer.</p>
+    <ol class="questions">
+      <li>Who will check the dashboard at the start, and who marks a report as cleared: your team or the council's staff?
+        <span class="why">This tells me who needs a login.</span>
+        <div class="answer" data-comment-form="q1"></div></li>
+      <li>How do you plan to approach a council, and do you have a contact or a way in?
+        <span class="why">Reports only get fixed if a council takes part.</span>
+        <div class="answer" data-comment-form="q2"></div></li>
+      <li>What is the plan for testing Resolve UK?
+        <span class="why">This helps me decide where to start.</span>
+        <div class="answer" data-comment-form="q3"></div></li>
+    </ol>
+
+    <h3>Smaller decisions that can wait</h3>
+    <ul>
+      <li>Should photos appear publicly straight away, or be checked first? They can show faces and number plates.</li>
+      <li>Should people who report need an account, or is anonymous fine?</li>
+      <li>How many confirmations should it take to count a fix as verified?</li>
+      <li>How long should reports and photos be kept?</li>
+      <li>If Resolve UK and Celestial Companions compete for time, which comes first?</li>
+    </ul>
+    <div class="answer" data-comment-form="decisions"></div>
+
+    <h2 id="comments">Your comments</h2>
+    <p>Anything you'd like to add, change or ask about any part of this document. I read every note, and my replies will appear here under your comment.</p>
+    <div data-comment-form="general"></div>
+    <p class="note-muted">Comments are saved so I can read and reply to them. Only I can read them, and you can see your own on the device you wrote them on. You can change what you wrote at any time.</p>
 
   </main>
 
@@ -404,8 +408,8 @@ erDiagram
 
 </div>
 
-<script src="../assets/config.js"></script>
-<script src="../assets/comments.js"></script>
+<script src="../assets/comments-config.js"></script>
+<script src="../assets/comments.js" data-report="resolve-blueprint"></script>
 <script src="https://cdn.jsdelivr.net/npm/mermaid@11.17.2/dist/mermaid.min.js"></script>
 <script>
   (function () {

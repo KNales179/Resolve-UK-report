@@ -1,272 +1,225 @@
 (function () {
-  var cfg = window.RESOLVE_COMMENTS || {};
-  var slots = Array.prototype.slice.call(document.querySelectorAll('[data-thread]'));
+  var script = document.currentScript;
+  var REPORT = (script && script.getAttribute('data-report')) || 'blueprint';
+  var cfg = window.COMMENTS_CONFIG || {};
   var configured = !!(cfg.url && cfg.anonKey);
 
-  // Adding ?preview=comments to the address shows the boxes before Supabase is connected.
-  // Nothing typed in preview is saved anywhere.
-  var preview = !configured && /[?&]preview=comments(&|$)/.test(location.search);
+  var boxes = [].slice.call(document.querySelectorAll('[data-comment-form]'));
+  if (!boxes.length) return;
 
-  // Otherwise, until the config is filled in, the page stays exactly as it is.
-  if ((!configured && !preview) || !slots.length) return;
+  var token = readerToken();
+  var saved = {};     // this reader's saved answer for each question, by key
+  var lastName = '';
 
-  var page = document.body.getAttribute('data-page') || 'page';
-  var client = null;
-  var session = null;
-  var comments = [];
-  var loadError = false;
+  var PEN = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>';
 
-  function el(tag, className, text) {
-    var node = document.createElement(tag);
-    if (className) node.className = className;
-    if (text !== undefined) node.textContent = text;
-    return node;
-  }
-
-  function nameFor(comment) {
-    if (session && comment.author_id === session.user.id) return 'You';
-    var local = String(comment.author_email || 'Someone').split('@')[0];
-    return local.charAt(0).toUpperCase() + local.slice(1);
-  }
-
-  function whenFor(comment) {
-    return new Date(comment.created_at).toLocaleString('en-GB', {
-      day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit'
+  function uuid() {
+    if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+      var r = Math.random() * 16 | 0;
+      return (c === 'x' ? r : (r & 3 | 8)).toString(16);
     });
   }
 
-  // A stand-in for the database that keeps everything in memory, used only for the preview.
-  function previewClient() {
-    var rows = [];
-    var listeners = [];
-    var me = { user: { id: 'preview', email: 'preview@example.com' } };
-    return {
-      auth: {
-        onAuthStateChange: function (callback) {
-          listeners.push(callback);
-          setTimeout(function () { callback('INITIAL_SESSION', me); }, 0);
-        },
-        signInWithOtp: function () { return Promise.resolve({ error: null }); },
-        signOut: function () {
-          listeners.forEach(function (callback) { callback('SIGNED_OUT', null); });
-          return Promise.resolve({ error: null });
-        }
-      },
-      from: function () {
-        return {
-          select: function () {
-            return { eq: function () { return { order: function () { return Promise.resolve({ data: rows.slice(), error: null }); } }; } };
-          },
-          insert: function (row) {
-            rows.push({
-              id: String(rows.length + 1), author_id: 'preview', author_email: 'preview@example.com',
-              created_at: new Date().toISOString(), page: row.page, target: row.target, body: row.body
-            });
-            return Promise.resolve({ error: null });
-          }
-        };
-      }
-    };
+  // A private, random id kept in this browser. It is how a reader gets their own answers back
+  // after a refresh. If the browser won't store it, answers still save, they just won't reappear.
+  function readerToken() {
+    var key = 'ccom_reader_token', t = null;
+    try { t = localStorage.getItem(key); } catch (e) {}
+    if (!t) {
+      t = uuid();
+      try { localStorage.setItem(key, t); } catch (e) {}
+    }
+    return t;
   }
 
-  // ---------- sign in ----------
-  function signInForm() {
-    var form = el('form', 'signin');
-    form.appendChild(el('p', 'hint', 'To comment, enter your email and a sign-in link will be sent to you.'));
-    var input = el('input');
-    input.type = 'email';
-    input.required = true;
-    input.placeholder = 'you@example.com';
-    input.setAttribute('aria-label', 'Email address');
-    form.appendChild(input);
-    var actions = el('div', 'actions');
-    var button = el('button', 'primary', 'Send sign-in link');
-    button.type = 'submit';
-    var status = el('span', 'status');
-    status.setAttribute('role', 'status');
-    actions.appendChild(button);
-    actions.appendChild(status);
-    form.appendChild(actions);
+  function endpoint(path) { return cfg.url.replace(/\/+$/, '') + '/rest/v1/' + path; }
 
-    form.addEventListener('submit', function (event) {
-      event.preventDefault();
-      status.className = 'status';
-      status.textContent = 'Sending...';
-      button.disabled = true;
-      client.auth.signInWithOtp({
-        email: input.value.trim(),
-        options: { shouldCreateUser: false, emailRedirectTo: location.origin + location.pathname }
-      }).then(function (result) {
-        button.disabled = false;
-        if (result.error) {
-          status.className = 'status error';
-          status.textContent = /signups? not allowed|not found/i.test(result.error.message)
-            ? "That email hasn't been invited."
-            : "The link couldn't be sent. Please try again.";
-        } else {
-          status.textContent = 'Check your email for the sign-in link.';
-        }
-      });
-    });
-    return form;
+  function headers() {
+    var h = { apikey: cfg.anonKey, 'Content-Type': 'application/json' };
+    // The older anon key is a JWT and is also sent as a bearer token. The newer publishable key is not, so it goes in apikey only.
+    if (/^eyJ/.test(cfg.anonKey)) h.Authorization = 'Bearer ' + cfg.anonKey;
+    return h;
   }
 
-  // ---------- write a comment ----------
-  function composer(target, placeholder) {
-    var form = el('form', 'composer');
-    var area = el('textarea');
-    area.required = true;
-    area.maxLength = 4000;
-    area.placeholder = placeholder;
-    area.setAttribute('aria-label', placeholder);
-    form.appendChild(area);
-    var actions = el('div', 'actions');
-    var button = el('button', 'primary', 'Post');
-    button.type = 'submit';
-    var status = el('span', 'status');
-    status.setAttribute('role', 'status');
-    actions.appendChild(button);
-    actions.appendChild(status);
-    form.appendChild(actions);
-
-    form.addEventListener('submit', function (event) {
-      event.preventDefault();
-      var body = area.value.trim();
-      if (!body) return;
-      button.disabled = true;
-      status.className = 'status';
-      status.textContent = 'Posting...';
-      client.from('comments').insert({ page: page, target: target, body: body }).then(function (result) {
-        if (result.error) {
-          button.disabled = false;
-          status.className = 'status error';
-          status.textContent = "That couldn't be posted. Please try again.";
-        } else {
-          refresh();
-        }
-      });
-    });
-    return form;
+  function rpc(name, body) {
+    return fetch(endpoint('rpc/' + name), { method: 'POST', headers: headers(), body: JSON.stringify(body) })
+      .then(function (r) { if (!r.ok) throw new Error(name + ' ' + r.status); return r.json(); });
   }
 
-  // ---------- render ----------
-  function renderSlot(slot) {
-    var target = slot.getAttribute('data-thread');
-    var general = target === 'general';
-    var mine = comments.filter(function (c) { return c.target === target; });
-    slot.textContent = '';
+  function load() {
+    return rpc('get_my_site_comments', { p_token: token, p_report: REPORT })
+      .then(function (rows) {
+        saved = {};
+        (rows || []).forEach(function (c) { saved[c.question_key] = c; });
+        boxes.forEach(function (box) {
+          var ta = box.querySelector('textarea');
+          if (box._editing || (ta && ta.value)) return; // never wipe something she is in the middle of typing
+          render(box);
+        });
+      })
+      .catch(function () { /* the boxes still work without the saved list */ });
+  }
 
+  function save(key, text, name) {
+    return rpc('save_my_site_comment', { p_token: token, p_report: REPORT, p_key: key, p_body: text, p_name: name || null })
+      .then(function (rows) { if (rows && rows[0]) saved[key] = rows[0]; });
+  }
+
+  function el(tag, cls, text) {
+    var n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (text) n.textContent = text;
+    return n;
+  }
+
+  function when(iso) {
+    try {
+      return new Date(iso).toLocaleString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+    } catch (e) { return ''; }
+  }
+
+  function noun(key) { return key === 'general' ? 'comment' : 'answer'; }
+
+  function startEdit(box) {
+    box._editing = true;
+    render(box);
+    var ta = box.querySelector('textarea');
+    if (ta) { ta.focus(); ta.setSelectionRange(ta.value.length, ta.value.length); }
+  }
+
+  function stopEdit(box) {
+    box._editing = false;
+    render(box);
+    var pen = box.querySelector('.pen');
+    if (pen) pen.focus();
+  }
+
+  // The saved answer, with a pen to change it. Double-clicking the text does the same.
+  function view(box, key, c) {
+    var d = el('div', 'saved');
+    var top = el('div', 'saved-top');
+    var meta = (c.author_name ? c.author_name + ' · ' : '') + (c.updated_at ? 'Edited ' + when(c.updated_at) : 'Saved ' + when(c.created_at));
+    top.appendChild(el('div', 'when', meta));
+    var pen = el('button', 'pen');
+    pen.type = 'button';
+    pen.title = 'Edit your ' + noun(key);
+    pen.setAttribute('aria-label', 'Edit your ' + noun(key));
+    pen.innerHTML = PEN;
+    pen.addEventListener('click', function () { startEdit(box); });
+    top.appendChild(pen);
+    d.appendChild(top);
+
+    var text = el('p', 'text', c.body);
+    text.title = 'Double-click to edit';
+    text.addEventListener('dblclick', function () { startEdit(box); });
+    d.appendChild(text);
+
+    if (c.reply) {
+      var r = el('div', 'reply');
+      r.appendChild(el('span', 'who', 'My reply' + (c.replied_at ? ' · ' + when(c.replied_at) : '')));
+      r.appendChild(el('p', 'text', c.reply));
+      d.appendChild(r);
+    }
+    return d;
+  }
+
+  // The input: empty the first time, filled in when changing an existing answer.
+  function editor(box, key, c, preview) {
+    var general = key === 'general';
+    var form = el('form');
+    form.noValidate = true;
+
+    var label = el('label', null, general ? 'Your comment' : 'Your answer');
+    var ta = el('textarea');
+    ta.id = 'comment-' + key;
+    ta.rows = 4;
+    ta.maxLength = 4000;
+    ta.value = c ? c.body : '';
+    label.htmlFor = ta.id;
+    form.appendChild(label);
+    form.appendChild(ta);
+
+    var nameInput = null;
     if (general) {
-      var heading = el('h2', null, slot.getAttribute('data-title') || 'Comments');
-      heading.id = 'comments';
-      slot.appendChild(heading);
-      slot.appendChild(el('p', 'hint', 'Replies to the questions above, or anything else, can go here.'));
+      var nl = el('label', 'name-label', 'Your name (optional)');
+      nameInput = el('input');
+      nameInput.type = 'text';
+      nameInput.id = 'comment-name';
+      nameInput.maxLength = 80;
+      nameInput.autocomplete = 'name';
+      nameInput.value = (c && c.author_name) || lastName;
+      nl.htmlFor = nameInput.id;
+      form.appendChild(nl);
+      form.appendChild(nameInput);
     }
 
-    if (session && loadError) {
-      slot.appendChild(el('p', 'status error', "Comments couldn't be loaded. Please refresh the page."));
-    }
+    var trap = el('input', 'hp');
+    trap.type = 'text';
+    trap.name = 'website';
+    trap.tabIndex = -1;
+    trap.autocomplete = 'off';
+    trap.setAttribute('aria-hidden', 'true');
+    form.appendChild(trap);
 
-    if (session && mine.length) {
-      var list = el('ul', 'thread-list');
-      mine.forEach(function (c) {
-        var item = el('li');
-        item.appendChild(el('div', 'comment-meta', nameFor(c) + ' · ' + whenFor(c)));
-        item.appendChild(el('p', 'comment-body', c.body));
-        list.appendChild(item);
-      });
-      slot.appendChild(list);
-    } else if (session && general && !loadError) {
-      slot.appendChild(el('p', 'hint', 'No comments yet.'));
+    var row = el('div', 'row');
+    var btn = el('button', 'button', 'Save');
+    btn.type = 'submit';
+    row.appendChild(btn);
+    var cancel = null;
+    if (c) {
+      cancel = el('button', 'button quiet', 'Cancel');
+      cancel.type = 'button';
+      cancel.addEventListener('click', function () { stopEdit(box); });
+      row.appendChild(cancel);
     }
+    var status = el('span', 'status');
+    status.setAttribute('role', 'status');
+    row.appendChild(status);
+    form.appendChild(row);
 
-    if (session) {
-      slot.appendChild(composer(target, general ? 'Write a comment' : 'Write a reply'));
-    } else if (general) {
-      slot.appendChild(signInForm());
-    } else {
-      var toggle = el('button', 'link', 'Reply');
-      toggle.type = 'button';
-      var holder = el('div', 'holder');
-      holder.hidden = true;
-      toggle.addEventListener('click', function () {
-        holder.hidden = !holder.hidden;
-        if (!holder.hidden) {
-          holder.textContent = '';
-          holder.appendChild(signInForm());
-          holder.querySelector('input').focus();
-        }
-      });
-      slot.appendChild(toggle);
-      slot.appendChild(holder);
-    }
-  }
-
-  function renderStatus() {
-    var bar = document.querySelector('.topbar');
-    if (!bar) return;
-    var old = bar.querySelector('.auth-status');
-    if (old) old.remove();
-    if (!session) return;
-    var box = el('span', 'auth-status');
+    // Until the database is connected, show the boxes so the layout can be judged, but don't let anyone type
     if (preview) {
-      box.textContent = 'Preview only. Nothing is saved.';
-    } else {
-      box.appendChild(document.createTextNode('Signed in as ' + session.user.email + ' · '));
-      var out = el('button', 'link', 'Sign out');
-      out.type = 'button';
-      out.addEventListener('click', function () { client.auth.signOut(); });
-      box.appendChild(out);
-    }
-    bar.insertBefore(box, bar.querySelector('.theme-toggle') || null);
-  }
-
-  function renderAll() {
-    slots.forEach(renderSlot);
-    renderStatus();
-  }
-
-  function refresh() {
-    if (!session) {
-      comments = [];
-      loadError = false;
-      renderAll();
-      return;
-    }
-    client.from('comments').select('*').eq('page', page).order('created_at', { ascending: true })
-      .then(function (result) {
-        loadError = !!result.error;
-        comments = result.error ? [] : (result.data || []);
-        renderAll();
-      });
-  }
-
-  // ---------- start ----------
-  function start() {
-    client = preview ? previewClient() : window.supabase.createClient(cfg.url, cfg.anonKey);
-
-    var contents = document.querySelector('.contents');
-    if (contents && slots.some(function (s) { return s.getAttribute('data-thread') === 'general'; })) {
-      contents.appendChild(document.createTextNode(' · '));
-      var link = el('a', null, 'Comments');
-      link.href = '#comments';
-      contents.appendChild(link);
+      ta.disabled = true;
+      if (nameInput) nameInput.disabled = true;
+      btn.disabled = true;
+      status.textContent = 'Preview only: saving is not switched on yet.';
     }
 
-    // Fires straight away with the current session, then again on sign in and sign out.
-    // The data call is deferred so it never runs inside the library's own callback.
-    client.auth.onAuthStateChange(function (event, next) {
-      session = next;
-      setTimeout(refresh, 0);
+    ta.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && c) { e.preventDefault(); stopEdit(box); }
     });
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var text = ta.value.trim();
+      if (trap.value) { ta.value = ''; return; } // a bot filled the hidden field
+      if (!text) { status.textContent = 'Please write something first.'; ta.focus(); return; }
+      if (nameInput) lastName = nameInput.value.trim();
+      btn.disabled = true;
+      if (cancel) cancel.disabled = true;
+      status.textContent = 'Saving…';
+      save(key, text, lastName)
+        .then(function () { box._editing = false; render(box); })
+        .catch(function () {
+          status.textContent = "That didn't save. Please try again in a moment.";
+          btn.disabled = false;
+          if (cancel) cancel.disabled = false;
+        });
+    });
+
+    return form;
   }
 
-  if (preview) {
-    start();
-  } else {
-    var script = document.createElement('script');
-    script.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.116.0/dist/umd/supabase.js';
-    script.onload = start;
-    document.head.appendChild(script);
+  function render(box) {
+    var key = box.getAttribute('data-comment-form');
+    var c = saved[key];
+    box.classList.add('comment-form');
+    box.textContent = '';
+    if (!configured) { box.appendChild(editor(box, key, null, true)); return; }
+    box.appendChild(box._editing || !c ? editor(box, key, c, false) : view(box, key, c));
   }
+
+  boxes.forEach(render);
+  if (configured) load();
 })();

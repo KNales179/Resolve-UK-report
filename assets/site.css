@@ -7,7 +7,6 @@
   --soft: #f0f2ec;
   --accent: #155b34;
   --accent-ink: #ffffff;
-  --danger: #b3261e;
   --serif: 'Source Serif 4', Georgia, 'Times New Roman', serif;
   --sans: 'Archivo', system-ui, -apple-system, 'Segoe UI', sans-serif;
 }
@@ -21,7 +20,6 @@
     --soft: #1e2220;
     --accent: #5cc08a;
     --accent-ink: #0b1a11;
-    --danger: #ff8a80;
   }
 }
 
@@ -36,7 +34,6 @@
   --soft: #1e2220;
   --accent: #5cc08a;
   --accent-ink: #0b1a11;
-  --danger: #ff8a80;
 }
 
 * { box-sizing: border-box; }
@@ -331,77 +328,57 @@ footer.doc {
 }
 
 /* ---- comments ---- */
-.auth-status {
-  margin-left: auto;
-  margin-right: 0.75rem;
-  font-size: 0.82rem;
-  color: var(--muted);
-}
+.answer { margin: 0.9rem 0 0.4rem; }
 
-.thread {
-  margin: 0.6rem 0 0.25rem;
+.comment-form label {
+  display: block;
   font-family: var(--sans);
-  font-size: 0.9rem;
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin: 0 0 0.3rem;
 }
 
-.thread .hint { color: var(--muted); font-size: 0.88rem; margin: 0 0 0.6rem; }
-.thread .status { color: var(--muted); }
-.thread .error, .thread .status.error { color: var(--danger); }
-.thread .holder { margin-top: 0.5rem; }
+.comment-form .name-label { margin-top: 0.8rem; }
 
-.thread-list {
-  list-style: none;
-  margin: 0 0 0.75rem;
-  padding: 0;
-  border-left: 2px solid var(--line);
-}
-
-.thread-list li { margin: 0; padding: 0.45rem 0 0.45rem 0.9rem; }
-.comment-meta { color: var(--muted); font-size: 0.78rem; margin-bottom: 0.1rem; }
-
-.comment-body {
-  margin: 0;
-  white-space: pre-wrap;
-  overflow-wrap: anywhere;
-  font-family: var(--serif);
-  font-size: 1rem;
-  line-height: 1.55;
-  color: var(--ink);
-}
-
-.thread textarea,
-.thread input[type="email"] {
+.comment-form textarea,
+.comment-form input[type="text"] {
   display: block;
   width: 100%;
-  font: inherit;
+  font: 400 1rem/1.5 var(--serif);
   color: var(--ink);
   background: var(--bg);
   border: 1px solid var(--line);
   border-radius: 4px;
-  padding: 0.55rem 0.7rem;
+  padding: 0.6rem 0.7rem;
 }
 
-.thread textarea { min-height: 5.5rem; resize: vertical; font-family: var(--serif); font-size: 1rem; }
-.thread:not([data-thread="general"]) textarea { min-height: 4rem; }
-.thread textarea:focus, .thread input[type="email"]:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
-.thread .actions { display: flex; flex-wrap: wrap; align-items: center; gap: 0.6rem; margin-top: 0.5rem; }
+.comment-form textarea { min-height: 6rem; resize: vertical; }
+.comment-form textarea:focus-visible,
+.comment-form input[type="text"]:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
 
-.thread button.primary,
-.thread button.primary:disabled { font: 600 0.88rem var(--sans); border: none; border-radius: 4px; padding: 0.5rem 0.95rem; }
-.thread button.primary { background: var(--accent); color: var(--accent-ink); cursor: pointer; }
-.thread button.primary:disabled { opacity: 0.6; cursor: default; }
+.comment-form .row { display: flex; align-items: center; gap: 0.9rem; flex-wrap: wrap; margin-top: 0.7rem; }
+.comment-form button.button { border: 0; cursor: pointer; }
+.comment-form button.button:disabled { opacity: 0.55; cursor: default; }
+.comment-form .status { font-family: var(--sans); font-size: 0.85rem; color: var(--muted); }
+.comment-form .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
 
-button.link {
-  font: inherit;
-  color: var(--accent);
-  background: none;
-  border: none;
-  padding: 0;
-  cursor: pointer;
-  text-decoration: underline;
-  text-underline-offset: 0.15em;
-}
+.saved { border-left: 3px solid var(--line); padding: 0.1rem 0 0.1rem 0.9rem; margin: 0.9rem 0; }
+.saved .when { font-family: var(--sans); font-size: 0.78rem; color: var(--muted); }
+.saved-top { display: flex; justify-content: space-between; align-items: center; gap: 0.6rem; }
+.pen { background: transparent; border: 1px solid transparent; border-radius: 4px; color: var(--muted); cursor: pointer; padding: 0.3rem 0.4rem; line-height: 0; }
+.pen:hover { color: var(--ink); border-color: var(--line); }
+.pen:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.pen svg { display: block; }
+.saved > .text { cursor: text; }
+.comment-form button.button.quiet { background: transparent; color: var(--muted); border: 1px solid var(--line); }
+.comment-form button.button.quiet:hover { color: var(--ink); }
+.saved .text { margin: 0.15rem 0 0.4rem; white-space: pre-wrap; font-size: 1rem; }
+.saved .reply { background: var(--soft); border-radius: 4px; padding: 0.55rem 0.8rem; margin-top: 0.5rem; }
+.saved .reply .who { display: block; font-family: var(--sans); font-size: 0.78rem; color: var(--muted); }
+.saved .reply .text { margin-bottom: 0; }
+
+.note-muted { font-family: var(--sans); font-size: 0.9rem; color: var(--muted); }
 
 @media print {
-  .theme-toggle, .contents, .thread, .auth-status { display: none; }
+  .theme-toggle, .contents, .comment-form { display: none; }
 }
