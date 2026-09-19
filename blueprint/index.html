@@ -29,6 +29,7 @@
       <a href="#checking">Checking a fix</a> &middot;
       <a href="#measuring">Measuring results</a> &middot;
       <a href="#order">Order of work</a> &middot;
+      <a href="#answers">Your questions</a> &middot;
       <a href="#questions">Questions for Ms Kay</a> &middot;
       <a href="#appendix">Technical appendix</a>
     </p>
@@ -219,6 +220,29 @@ sequenceDiagram
       <figcaption>Figure 4. The stages laid out over weeks, at about 10 hours a week. The dashed bar depends on finding a council. If Celestial Companions takes priority for a while, everything moves later.</figcaption>
     </figure>
 
+    <h2 id="answers">Your questions, and my answers</h2>
+    <p>Here are the questions you asked after the Week 1 report, with my answers.</p>
+
+    <h3>What does "shipped" mean?</h3>
+    <p>Sorry, that section was too technical. It just means what's finished and working. You can open the prototype on a phone, report a problem with a photo and a location, and see it show up in a list. I've rewritten it in plain language in the <a href="../week-1/">Week 1 report</a>.</p>
+
+    <h3>What are the timing requirements for the next steps?</h3>
+    <p>I can't give firm dates yet, but the first three stages should take about 4 to 7.5 weeks, or up to 9.5 with the AI part. That's at about 10 hours a week on Resolve UK, because my time is split with Celestial Companions. If you'd rather one of the two came first, tell me and I'll adjust. Anything that needs a council can't be dated until we have one. The full breakdown is under <a href="#order">Order of work</a>.</p>
+
+    <h3>Where is the data, and what would it take to move it?</h3>
+    <p>At the moment it's in Seoul, South Korea. I picked that region for convenience while building, and it only holds test reports. It needs to move to the UK or EU before any real reports come in. UK law doesn't ban storing data abroad, but it adds extra requirements, and councils will most likely ask for UK or EU hosting.</p>
+    <p>Moving now is easy because there's nothing real to move. It's about an hour or two of work and costs nothing extra. Doing it later, with real reports and photos in the database, is harder and riskier. So I'd do it first, in London if I can or otherwise elsewhere in the EU, and set it up under an account that can be handed over to you or your organisation. I'm also changing how photos are stored so a later move can't break their links.</p>
+
+    <h3>What happens when the free usage runs out, and what does it cost?</h3>
+    <p>The prototype runs on free plans for the database and photos (Supabase) and for the website (Vercel). Photo storage would run out first. The free plan has about 1 GB, and full-size phone photos are 3 to 5 MB each, so that's a few hundred reports. Shrinking photos when they're uploaded fixes most of that. If we did hit the limit, uploads could stop working, so I'd upgrade before then.</p>
+    <p>The paid plans are roughly $25 a month for Supabase and $20 a month for Vercel, so about $45 a month for a pilot, plus the cost of the AI features once we know how many reports to expect. Vercel's free plan is meant for non-commercial use, so a real pilot should be on the paid one anyway. Those are the prices as I know them. I'll check the current ones before the pilot.</p>
+
+    <h3>Can you match a report's location to others nearby, to stop duplicates?</h3>
+    <p>Yes. Before a report is saved, the app can check for an open report of the same type nearby and ask the person whether it's the same problem. I'd ask rather than merge automatically, because a wrong guess could hide a real second problem. The distance is still to be decided. I'd start at about 10 to 20 metres for potholes and 25 to 50 for other problems, then adjust once we see real reports. It also gives you the shared view of an incident that you described. <a href="#sending">Sending in a report</a> shows where it fits.</p>
+
+    <h3>Surely most people have GPS on?</h3>
+    <p>You're right that most phones have it and most people will allow it, so most locations will be fine. I'd still keep the manual pin, for a few reasons. GPS is only accurate to about 5 to 20 metres, and worse between tall buildings. People often report later from home, when the phone's location is their house. And some people will be on a computer or will say no to location sharing. So the app uses GPS first, lets people correct it, and records how accurate it was. It's a small risk, not a big one.</p>
+
     <h2 id="questions">Questions for Ms Kay</h2>
     <p>Three questions would help us most.</p>
     <ol class="questions">
@@ -259,7 +283,7 @@ flowchart TB
     Fn["Edge Functions: routing + AI calls"]
   end
   subgraph Ext["External"]
-    AI["Claude API"]
+    AI["AI service"]
     Tiles["Map tiles"]
   end
   Bounds["Open boundary data"] -.->|"loaded once for the pilot area"| DB
