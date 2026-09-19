@@ -7,6 +7,7 @@
   --soft: #f0f2ec;
   --accent: #155b34;
   --accent-ink: #ffffff;
+  --danger: #b3261e;
   --serif: 'Source Serif 4', Georgia, 'Times New Roman', serif;
   --sans: 'Archivo', system-ui, -apple-system, 'Segoe UI', sans-serif;
 }
@@ -20,6 +21,7 @@
     --soft: #1e2220;
     --accent: #5cc08a;
     --accent-ink: #0b1a11;
+    --danger: #ff8a80;
   }
 }
 
@@ -34,6 +36,7 @@
   --soft: #1e2220;
   --accent: #5cc08a;
   --accent-ink: #0b1a11;
+  --danger: #ff8a80;
 }
 
 * { box-sizing: border-box; }
@@ -327,6 +330,77 @@ footer.doc {
   color: var(--muted);
 }
 
+/* ---- comments ---- */
+.auth-status {
+  margin-left: auto;
+  margin-right: 0.75rem;
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+
+.thread {
+  margin: 0.6rem 0 0.25rem;
+  font-family: var(--sans);
+  font-size: 0.9rem;
+}
+
+.thread .hint { color: var(--muted); font-size: 0.88rem; margin: 0 0 0.6rem; }
+.thread .status { color: var(--muted); }
+.thread .error, .thread .status.error { color: var(--danger); }
+.thread .holder { margin-top: 0.5rem; }
+
+.thread-list {
+  list-style: none;
+  margin: 0 0 0.75rem;
+  padding: 0;
+  border-left: 2px solid var(--line);
+}
+
+.thread-list li { margin: 0; padding: 0.45rem 0 0.45rem 0.9rem; }
+.comment-meta { color: var(--muted); font-size: 0.78rem; margin-bottom: 0.1rem; }
+
+.comment-body {
+  margin: 0;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font-family: var(--serif);
+  font-size: 1rem;
+  line-height: 1.55;
+  color: var(--ink);
+}
+
+.thread textarea,
+.thread input[type="email"] {
+  display: block;
+  width: 100%;
+  font: inherit;
+  color: var(--ink);
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 0.55rem 0.7rem;
+}
+
+.thread textarea { min-height: 5.5rem; resize: vertical; font-family: var(--serif); font-size: 1rem; }
+.thread textarea:focus, .thread input[type="email"]:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+.thread .actions { display: flex; flex-wrap: wrap; align-items: center; gap: 0.6rem; margin-top: 0.5rem; }
+
+.thread button.primary,
+.thread button.primary:disabled { font: 600 0.88rem var(--sans); border: none; border-radius: 4px; padding: 0.5rem 0.95rem; }
+.thread button.primary { background: var(--accent); color: var(--accent-ink); cursor: pointer; }
+.thread button.primary:disabled { opacity: 0.6; cursor: default; }
+
+button.link {
+  font: inherit;
+  color: var(--accent);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
 @media print {
-  .theme-toggle, .contents { display: none; }
+  .theme-toggle, .contents, .thread, .auth-status { display: none; }
 }

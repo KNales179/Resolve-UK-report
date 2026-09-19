@@ -11,7 +11,7 @@
 <link rel="stylesheet" href="../assets/site.css">
 <script src="../assets/site.js"></script>
 </head>
-<body>
+<body data-page="blueprint">
 <div class="wrap">
 
   <div class="topbar">
@@ -274,11 +274,14 @@ sequenceDiagram
     <p>Three questions would help me most.</p>
     <ol class="questions">
       <li>Who will check the dashboard at the start, and who marks a report as cleared: your team or the council's staff?
-        <span class="why">This tells me who needs a login.</span></li>
+        <span class="why">This tells me who needs a login.</span>
+        <div class="thread" data-thread="q1"></div></li>
       <li>How do you plan to approach a council, and do you have a contact or a way in?
-        <span class="why">Reports only get fixed if a council takes part.</span></li>
+        <span class="why">Reports only get fixed if a council takes part.</span>
+        <div class="thread" data-thread="q2"></div></li>
       <li>What is the plan for testing Resolve UK?
-        <span class="why">This helps me decide where to start.</span></li>
+        <span class="why">This helps me decide where to start.</span>
+        <div class="thread" data-thread="q3"></div></li>
     </ol>
 
     <h3>Smaller decisions that can wait</h3>
@@ -289,6 +292,7 @@ sequenceDiagram
       <li>How long should reports and photos be kept?</li>
       <li>If Resolve UK and Celestial Companions compete for time, which comes first?</li>
     </ul>
+    <div class="thread" data-thread="decisions"></div>
 
     <h2 id="appendix">Technical appendix</h2>
     <p>This part is for whoever builds or takes over the system. Everyone else can skip it.</p>
@@ -392,12 +396,16 @@ erDiagram
       <li>There is a list of every third-party service used, with what it costs and who pays.</li>
     </ul>
 
+    <div class="thread" data-thread="general" data-title="Comments"></div>
+
   </main>
 
   <footer class="doc">Resolve UK Blueprint &middot; Draft 1 &middot; 19 September 2026</footer>
 
 </div>
 
+<script src="../assets/config.js"></script>
+<script src="../assets/comments.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/mermaid@11.17.2/dist/mermaid.min.js"></script>
 <script>
   (function () {
