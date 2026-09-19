@@ -1,9 +1,14 @@
 (function () {
   var cfg = window.RESOLVE_COMMENTS || {};
   var slots = Array.prototype.slice.call(document.querySelectorAll('[data-thread]'));
+  var configured = !!(cfg.url && cfg.anonKey);
 
-  // Until the config is filled in, the page stays exactly as it is.
-  if (!cfg.url || !cfg.anonKey || !slots.length) return;
+  // Adding ?preview=comments to the address shows the boxes before Supabase is connected.
+  // Nothing typed in preview is saved anywhere.
+  var preview = !configured && /[?&]preview=comments(&|$)/.test(location.search);
+
+  // Otherwise, until the config is filled in, the page stays exactly as it is.
+  if ((!configured && !preview) || !slots.length) return;
 
   var page = document.body.getAttribute('data-page') || 'page';
   var client = null;
@@ -28,6 +33,40 @@
     return new Date(comment.created_at).toLocaleString('en-GB', {
       day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit'
     });
+  }
+
+  // A stand-in for the database that keeps everything in memory, used only for the preview.
+  function previewClient() {
+    var rows = [];
+    var listeners = [];
+    var me = { user: { id: 'preview', email: 'preview@example.com' } };
+    return {
+      auth: {
+        onAuthStateChange: function (callback) {
+          listeners.push(callback);
+          setTimeout(function () { callback('INITIAL_SESSION', me); }, 0);
+        },
+        signInWithOtp: function () { return Promise.resolve({ error: null }); },
+        signOut: function () {
+          listeners.forEach(function (callback) { callback('SIGNED_OUT', null); });
+          return Promise.resolve({ error: null });
+        }
+      },
+      from: function () {
+        return {
+          select: function () {
+            return { eq: function () { return { order: function () { return Promise.resolve({ data: rows.slice(), error: null }); } }; } };
+          },
+          insert: function (row) {
+            rows.push({
+              id: String(rows.length + 1), author_id: 'preview', author_email: 'preview@example.com',
+              created_at: new Date().toISOString(), page: row.page, target: row.target, body: row.body
+            });
+            return Promise.resolve({ error: null });
+          }
+        };
+      }
+    };
   }
 
   // ---------- sign in ----------
@@ -141,8 +180,10 @@
       slot.appendChild(el('p', 'hint', 'No comments yet.'));
     }
 
-    if (general) {
-      slot.appendChild(session ? composer(target, 'Write a comment') : signInForm());
+    if (session) {
+      slot.appendChild(composer(target, general ? 'Write a comment' : 'Write a reply'));
+    } else if (general) {
+      slot.appendChild(signInForm());
     } else {
       var toggle = el('button', 'link', 'Reply');
       toggle.type = 'button';
@@ -152,9 +193,8 @@
         holder.hidden = !holder.hidden;
         if (!holder.hidden) {
           holder.textContent = '';
-          holder.appendChild(session ? composer(target, 'Write a reply') : signInForm());
-          var field = holder.querySelector('textarea, input');
-          if (field) field.focus();
+          holder.appendChild(signInForm());
+          holder.querySelector('input').focus();
         }
       });
       slot.appendChild(toggle);
@@ -169,13 +209,16 @@
     if (old) old.remove();
     if (!session) return;
     var box = el('span', 'auth-status');
-    box.appendChild(document.createTextNode('Signed in as ' + session.user.email + ' · '));
-    var out = el('button', 'link', 'Sign out');
-    out.type = 'button';
-    out.addEventListener('click', function () { client.auth.signOut(); });
-    box.appendChild(out);
-    var toggle = bar.querySelector('.theme-toggle');
-    bar.insertBefore(box, toggle || null);
+    if (preview) {
+      box.textContent = 'Preview only. Nothing is saved.';
+    } else {
+      box.appendChild(document.createTextNode('Signed in as ' + session.user.email + ' · '));
+      var out = el('button', 'link', 'Sign out');
+      out.type = 'button';
+      out.addEventListener('click', function () { client.auth.signOut(); });
+      box.appendChild(out);
+    }
+    bar.insertBefore(box, bar.querySelector('.theme-toggle') || null);
   }
 
   function renderAll() {
@@ -200,7 +243,7 @@
 
   // ---------- start ----------
   function start() {
-    client = window.supabase.createClient(cfg.url, cfg.anonKey);
+    client = preview ? previewClient() : window.supabase.createClient(cfg.url, cfg.anonKey);
 
     var contents = document.querySelector('.contents');
     if (contents && slots.some(function (s) { return s.getAttribute('data-thread') === 'general'; })) {
@@ -218,8 +261,12 @@
     });
   }
 
-  var script = document.createElement('script');
-  script.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.116.0/dist/umd/supabase.js';
-  script.onload = start;
-  document.head.appendChild(script);
+  if (preview) {
+    start();
+  } else {
+    var script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.116.0/dist/umd/supabase.js';
+    script.onload = start;
+    document.head.appendChild(script);
+  }
 })();

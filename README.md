@@ -48,6 +48,10 @@ sign in, and only signed-in people can read or write.
 4. Under Authentication, URL Configuration, set the Site URL to the deployed address and add the blueprint page (for example `https://your-site.vercel.app/blueprint/`) to the Redirect URLs. Add `http://localhost:8000/blueprint/` too if testing locally.
 5. Put the project URL and the publishable key in `assets/config.js`. The publishable key is meant to be public. Never put a secret key there.
 
+To see how the boxes look before Supabase is connected, add `?preview=comments`
+to the blueprint address. It shows working boxes, but nothing typed there is
+saved, and normal visitors never see it.
+
 To read comments outside the site, open the `comments` table in the Supabase
 table editor. Comments cannot be edited or deleted from the site itself.
 

@@ -382,6 +382,7 @@ footer.doc {
 }
 
 .thread textarea { min-height: 5.5rem; resize: vertical; font-family: var(--serif); font-size: 1rem; }
+.thread:not([data-thread="general"]) textarea { min-height: 4rem; }
 .thread textarea:focus, .thread input[type="email"]:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
 .thread .actions { display: flex; flex-wrap: wrap; align-items: center; gap: 0.6rem; margin-top: 0.5rem; }
 
