@@ -188,6 +188,21 @@ pre.mermaid,
 
 .chart { text-align: left; }
 
+/* A wide figure uses more than the text column on large screens, so dense diagrams can be drawn at full size. */
+figure.wide {
+  width: min(72rem, calc(100vw - 40px));
+  margin-left: 50%;
+  transform: translateX(-50%);
+}
+
+figure.wide figcaption {
+  max-width: 46rem;
+  margin-inline: auto;
+}
+
+/* On narrow screens keep it readable and scroll sideways inside its box instead of shrinking. */
+figure.wide pre.mermaid svg { min-width: 760px; }
+
 figcaption {
   font-family: var(--sans);
   font-size: 0.85rem;

@@ -48,7 +48,7 @@
       <li>This plan builds the first phase of your three-phase picture: report, route, track, resolve and verify. Analysis, comparison and prediction come later and are outlined under Where this leads.</li>
       <li>Anything involving a council depends on finding one that will take part, and I can't put a date on that yet.</li>
     </ul>
-    <p>The time estimates are rough guesses. Prices, licence terms and which council covers what also still need checking before I rely on them.</p>
+    <p>The time estimates are rough guesses. Licence terms and which council covers what also still need checking before I rely on them.</p>
 
     <h2 id="moves">How a report moves</h2>
     <p>Every report goes through the same set of stages. The middle ones are the stages you described: reported, responsible body identified, acknowledged, clearance scheduled, cleared and outcome verified. I've added three for when things don't go smoothly: duplicate, rejected and reopened. By "responsible body" I mean the council, or a contractor the council uses for that kind of work.</p>
@@ -259,7 +259,7 @@ sequenceDiagram
 
     <h3>What happens when the free usage runs out, and what does it cost?</h3>
     <p>The prototype runs on free plans for the database and photos (Supabase) and for the website (Vercel). Photo storage would run out first. The free plan has about 1 GB, and full-size phone photos are 3 to 5 MB each, so that's a few hundred reports. Shrinking photos when they're uploaded fixes most of that. If the limit were hit, uploads could stop working, so I'd upgrade before then.</p>
-    <p>The paid plans are roughly $25 a month for Supabase and $20 a month for Vercel, so about $45 a month for a pilot, plus the cost of the AI features once I know how many reports to expect. Vercel's free plan is meant for non-commercial use, so a real pilot should be on the paid one anyway. Those are the prices as I know them. I'll check the current ones before the pilot.</p>
+    <p>The paid plans start at $25 a month for Supabase and $20 a month for Vercel, so about $45 a month for a pilot, plus the cost of the AI features once I know how many reports to expect. Vercel's free plan is for non-commercial use only, so a real pilot should be on the paid one anyway. I checked both companies' pricing pages on 20 September 2026 and these figures were current then. Supabase's price can rise if a project goes beyond its included allowance, and Vercel's covers one developer, with each extra developer costing another $20 a month.</p>
 
     <h3>Can you match a report's location to others nearby, to stop duplicates?</h3>
     <p>Yes. Before a report is saved, the app can check for an open report of the same type nearby and ask the person whether it's the same problem. I'd ask rather than merge automatically, because a wrong guess could hide a real second problem. The distance is still to be decided. I'd start at about 10 to 20 metres for potholes and 25 to 50 for other problems, then adjust once real reports come in. It also gives you the shared view of an incident that you described. <a href="#sending">Sending in a report</a> shows where it fits.</p>
@@ -329,82 +329,36 @@ flowchart TB
 
     <h3>Data model</h3>
     <p>The main change from the prototype is that a report's history becomes a list of entries that only ever grows. The current status is then a shortcut copied from the latest entry, not the source of truth.</p>
-    <figure>
+    <figure class="wide">
       <pre class="mermaid">
 erDiagram
   RESPONSIBLE_BODIES ||--o{ REPORTS : "is responsible for"
   RESPONSIBLE_BODIES ||--o{ STAFF_PROFILES : employs
   RESPONSIBLE_BODIES |o--o{ RESPONSIBLE_BODIES : "contractor works for"
-  RESPONSIBLE_BODIES |o--o{ INTERVENTIONS : "carried out by"
+  RESPONSIBLE_BODIES |o--o{ INTERVENTIONS : "carries out"
   CATEGORIES ||--o{ REPORTS : classifies
   REPORTS ||--|{ REPORT_EVENTS : "has history"
   REPORTS ||--o{ REPORT_SUPPORTS : "confirmed by"
   REPORTS ||--o{ INTERVENTIONS : "fixed by"
-  RESPONSIBLE_BODIES {
-    uuid id PK
-    text name
-    text kind "council or contractor"
-    text tier "unitary, county or district (councils only)"
-    uuid works_for_id FK "the council a contractor works for"
-    text_array functions "highways, waste, streetscene"
-    geometry boundary "councils only"
-  }
-  CATEGORIES {
-    text code PK
-    text label
-    text function "which responsibility owns it"
-  }
-  REPORTS {
-    uuid id PK
-    text category_code FK
-    text description
-    geography location
-    real location_accuracy_m
-    text location_source "gps or manual"
-    text photo_path
-    uuid responsible_body_id FK "empty until routed"
-    text current_status "copied from latest event"
-    text ai_category
-    real ai_confidence
-    uuid duplicate_of FK
-    timestamptz created_at
-  }
-  REPORT_EVENTS {
-    uuid id PK
-    uuid report_id FK
-    text status
-    text actor_type "citizen, staff, ai or system"
-    uuid actor_id
-    text note
-    text photo_path
-    jsonb data
-    timestamptz created_at
-  }
-  REPORT_SUPPORTS {
-    uuid id PK
-    uuid report_id FK
-    text device_token
-    text kind "same_issue, still_there or fixed"
-    timestamptz created_at
-  }
-  INTERVENTIONS {
-    uuid id PK
-    uuid report_id FK
-    uuid body_id FK
-    text type "cleared, camera, barrier, signage, enforcement or other"
-    text description
-    integer cost_pence "optional"
-    timestamptz done_at
-  }
-  STAFF_PROFILES {
-    uuid id PK "same as the sign-in id"
-    uuid body_id FK
-    text role "staff, body_admin or resolve_admin"
-    text display_name
-  }
       </pre>
-      <figcaption>Figure 6. The tables and how they relate. Photos are stored by path, not full URL, so moving to a new project never breaks a link. Location accuracy is kept so the nearby check can allow for GPS error. Interventions record what was done about a problem, by whom, and what it cost.</figcaption>
+      <figcaption>Figure 6. How the tables relate to each other. The fields in each table are listed underneath.</figcaption>
     </figure>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Table</th><th>Fields</th></tr></thead>
+        <tbody>
+          <tr><td>responsible_bodies</td><td>id, name, kind (council or contractor), tier (unitary, county or district; councils only), works_for_id (the council a contractor works for), functions (for example highways, waste, streetscene), boundary (councils only)</td></tr>
+          <tr><td>categories</td><td>code, label, function (which responsibility owns this type of issue)</td></tr>
+          <tr><td>reports</td><td>id, category_code, description, location, location_accuracy_m, location_source (gps or manual), photo_path, responsible_body_id (empty until routed), current_status (copied from the latest history entry), ai_category, ai_confidence, duplicate_of, created_at</td></tr>
+          <tr><td>report_events</td><td>id, report_id, status, actor_type (citizen, staff, ai or system), actor_id, note, photo_path, data (extra details), created_at</td></tr>
+          <tr><td>report_supports</td><td>id, report_id, device_token, kind (same_issue, still_there or fixed), created_at</td></tr>
+          <tr><td>interventions</td><td>id, report_id, body_id, type (cleared, camera, barrier, signage, enforcement or other), description, cost_pence (optional), done_at</td></tr>
+          <tr><td>staff_profiles</td><td>id (same as the sign-in id), body_id, role (staff, body_admin or resolve_admin), display_name</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Photos are stored by path, not full URL, so moving to a new project never breaks a link. Location accuracy is kept so the nearby check can allow for GPS error. Interventions record what was done about a problem, by whom, and what it cost.</p>
     <p>Routing picks the council whose boundary contains the point and whose responsibilities include the issue type. If that council has a contractor for that kind of work, the report goes to the contractor. That handles areas where the county and district split the work. Following an area will need an extra <code>area_follows</code> table, which comes with that later stage.</p>
 
     <h3>Who can see and change what</h3>
