@@ -15,7 +15,7 @@ separate repository.
 |---|---|
 | `/` | Index of all reports, newest first |
 | `/week-1/` | Week 1 status report: what shipped, the development plan, risks, and questions |
-| `/blueprint/` | Draft system plan: how a report moves, order of work, answers to Ms Kay's questions, questions for Ms Kay, and a technical appendix with the data model |
+| `/blueprint/` | Draft system plan: how a report moves, order of work, where this leads, answers to Ms Kay's questions, questions for Ms Kay, and a technical appendix with the data model |
 | `/assets/` | Shared stylesheet and script used by every page |
 
 Every page has a light/dark button. The default follows the system setting, and

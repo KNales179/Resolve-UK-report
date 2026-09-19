@@ -29,6 +29,7 @@
       <a href="#checking">Checking a fix</a> &middot;
       <a href="#measuring">Measuring results</a> &middot;
       <a href="#order">Order of work</a> &middot;
+      <a href="#leads">Where this leads</a> &middot;
       <a href="#answers">Your questions</a> &middot;
       <a href="#questions">Questions for Ms Kay</a> &middot;
       <a href="#appendix">Technical appendix</a>
@@ -39,17 +40,18 @@
 
     <h2 id="summary" style="margin-top:0">Summary</h2>
     <p>This is my plan for taking Resolve UK from the working prototype to something councils can actually use. It covers how a report travels from a photo on someone's phone to a confirmed fix, what I would build and in what order, and a few questions I need your help with before going further.</p>
-    <p>It's based on the answers you sent after the Week 1 report. Nothing described here has been built yet, so please read it as a draft. If something is wrong or missing, tell me and I'll change the plan before I build.</p>
+    <p>It's based on the two emails you sent after the Week 1 report. Nothing described here has been built yet, so please read it as a draft. If something is wrong or missing, tell me and I'll change the plan before I build.</p>
     <p>In short:</p>
     <ul>
-      <li>A resident reports a problem. Staff at the responsible council update its progress. Residents, helped by a photo-checking tool, confirm whether it was really fixed.</li>
-      <li>I would start with a safe home for the data and a dashboard for whoever handles reports. The first three stages come to about 4 to 7.5 weeks of work.</li>
+      <li>A resident reports a problem. Staff at the responsible council or its contractor update its progress. Residents, helped by a photo-checking tool, confirm whether it was really fixed.</li>
+      <li>I would start with a safe home for the data and a dashboard for whoever handles reports. The first three stages come to about 4.5 to 8.5 weeks of work.</li>
+      <li>This plan builds the first phase of your three-phase picture: report, route, track, resolve and verify. Analysis, comparison and prediction come later and are outlined under Where this leads.</li>
       <li>Anything involving a council depends on finding one that will take part, and I can't put a date on that yet.</li>
     </ul>
     <p>The time estimates are rough guesses. Prices, licence terms and which council covers what also still need checking before I rely on them.</p>
 
     <h2 id="moves">How a report moves</h2>
-    <p>Every report goes through the same set of stages. The middle ones are the stages you described: reported, responsible body identified, acknowledged, clearance scheduled, cleared and outcome verified. I've added three for when things don't go smoothly: duplicate, rejected and reopened.</p>
+    <p>Every report goes through the same set of stages. The middle ones are the stages you described: reported, responsible body identified, acknowledged, clearance scheduled, cleared and outcome verified. I've added three for when things don't go smoothly: duplicate, rejected and reopened. By "responsible body" I mean the council, or a contractor the council uses for that kind of work.</p>
 
     <figure>
       <pre class="mermaid">
@@ -61,13 +63,13 @@ stateDiagram-v2
   Reported --> Duplicate: matches an existing report
   Reported --> Rejected: not actionable
   Reported --> Routed
-  Routed --> Acknowledged: council sees it
+  Routed --> Acknowledged: responsible body sees it
   Acknowledged --> Scheduled: date set for the work
-  Scheduled --> Cleared: council says it's done
+  Scheduled --> Cleared: responsible body says it's done
   Acknowledged --> Cleared: fixed without a scheduled date
   Cleared --> Verified: independent evidence agrees
   Cleared --> Reopened: evidence says it is still there
-  Reopened --> Acknowledged: council picks it up again
+  Reopened --> Acknowledged: responsible body picks it up again
   Verified --> [*]
   Duplicate --> [*]
   Rejected --> [*]
@@ -75,21 +77,21 @@ stateDiagram-v2
       <figcaption>Figure 1. The stages a report can move through.</figcaption>
     </figure>
 
-    <p>One distinction matters more than the rest. When a council marks a job as cleared, that's the council's own word. A report only becomes verified when someone independent, such as a resident or the photo check, agrees that it's fixed. Keeping those two apart is what makes it possible to say how many fixes are genuinely confirmed.</p>
+    <p>One distinction matters more than the rest. When the responsible body marks a job as cleared, that's its own word. A report only becomes verified when someone independent, such as a resident or the photo check, agrees that it's fixed. Keeping those two apart is what makes it possible to say how many fixes are genuinely confirmed.</p>
 
     <div class="table-wrap">
       <table>
         <thead><tr><th>Stage</th><th>What it means</th><th>Who sets it</th></tr></thead>
         <tbody>
           <tr><td>Reported</td><td>Someone has sent it in.</td><td>The resident</td></tr>
-          <tr><td>Responsible body identified</td><td>The system knows which council should deal with it.</td><td>Set automatically, or by staff</td></tr>
-          <tr><td>Acknowledged</td><td>The council has seen it.</td><td>Council staff</td></tr>
-          <tr><td>Clearance scheduled</td><td>A date for the work is set.</td><td>Council staff</td></tr>
-          <tr><td>Cleared</td><td>The council says the job is done.</td><td>Council staff</td></tr>
+          <tr><td>Responsible body identified</td><td>The system knows who should deal with it: the council, or a contractor it uses.</td><td>Set automatically, or by staff</td></tr>
+          <tr><td>Acknowledged</td><td>The responsible body has seen it.</td><td>Council or contractor staff</td></tr>
+          <tr><td>Clearance scheduled</td><td>A date for the work is set.</td><td>Council or contractor staff</td></tr>
+          <tr><td>Cleared</td><td>The responsible body says the job is done.</td><td>Council or contractor staff</td></tr>
           <tr><td>Outcome verified</td><td>Independent evidence shows it's fixed.</td><td>A rule that weighs the evidence</td></tr>
           <tr><td>Reopened</td><td>Evidence shows the problem is still there.</td><td>The same rule, checked by staff</td></tr>
           <tr><td>Duplicate</td><td>It matches a report already made.</td><td>The resident when they send it, or staff</td></tr>
-          <tr><td>Rejected</td><td>Not something the council can act on.</td><td>Council staff</td></tr>
+          <tr><td>Rejected</td><td>Not something the responsible body can act on.</td><td>Council or contractor staff</td></tr>
         </tbody>
       </table>
     </div>
@@ -115,14 +117,14 @@ flowchart TD
     F --> I["Save the extra voice against that report"]
   end
   subgraph Auto["Behind the scenes"]
-    H --> J["Work out the responsible council from the location and type"]
+    H --> J["Work out the responsible body, a council or its contractor, from the location and type"]
     H --> K["Suggest a category from the photo"]
     J --> L["History entry: responsible body identified"]
     K --> M{"Confident?"}
     M -->|"Yes"| N["Keep the suggestion"]
     M -->|"No"| O["Flag for a person to check"]
   end
-  subgraph Staff["Council staff"]
+  subgraph Staff["Council or contractor staff"]
     L --> P["Report appears on their dashboard"]
     N --> P
     O --> P
@@ -132,16 +134,16 @@ flowchart TD
     </figure>
 
     <p>Before the report is saved, the app looks for an open report of the same type nearby and asks the person whether it's the same problem. If it is, their report is added to the existing one instead of creating a duplicate. I'd ask rather than merge automatically, because a wrong guess would hide a genuine second problem. I'd start with a distance of about 10 to 20 metres for potholes and 25 to 50 metres for other problems, then adjust once real reports come in.</p>
-    <p>The system then works out which council is responsible from the location and the type of problem. Location alone isn't always enough. In areas with two levels of council, the county usually looks after potholes and the district looks after fly-tipping. I'll confirm who covers what in the pilot area before relying on this.</p>
+    <p>The system then works out who is responsible from the location and the type of problem. That is usually a council, but councils often hand some of the work, such as waste clearance or road repairs, to a contractor, so the report can go to the contractor instead. Location alone isn't always enough. In areas with two levels of council, the county usually looks after potholes and the district looks after fly-tipping. I'll confirm who covers what, and who the contractors are, in the pilot area before relying on this.</p>
     <p>It also suggests a category from the photo. If it isn't confident, the report is flagged for a person to look at.</p>
 
     <h2 id="checking">Checking a fix</h2>
-    <p>When a council marks a report as cleared, the app asks the person who reported it, and anyone who backed the report, whether it's really fixed. A new photo helps. A photo-comparison tool can look at the before and after pictures, but it only advises. It gives one of three answers: likely fixed, possibly not fixed, or needs a person to look.</p>
+    <p>When the responsible body marks a report as cleared, the app asks the person who reported it, and anyone who backed the report, whether it's really fixed. A new photo helps. A photo-comparison tool can look at the before and after pictures, but it only advises. It gives one of three answers: likely fixed, possibly not fixed, or needs a person to look.</p>
 
     <figure>
       <pre class="mermaid">
 sequenceDiagram
-  participant S as Council staff
+  participant S as Council or contractor
   participant P as The platform
   participant C as Nearby residents
   participant A as Photo check
@@ -154,7 +156,7 @@ sequenceDiagram
     P->>P: Status becomes verified
   else Evidence says it is still there
     P->>P: Status becomes reopened
-    P->>S: Tells the council it was reopened
+    P->>S: Tells the responsible body it was reopened
   else Unclear
     P->>S: Asks a person to review
   end
@@ -162,12 +164,12 @@ sequenceDiagram
       <figcaption>Figure 3. How a fix gets checked.</figcaption>
     </figure>
 
-    <p>My draft rule is that a report becomes verified when the council has said cleared and at least one independent confirmation agrees. If the evidence says the problem is still there, the report reopens and the council is told. If nobody responds, it stays as cleared but unverified, and is counted that way, so the verification figures stay honest. How many confirmations it takes is one of the decisions that can wait.</p>
+    <p>My draft rule is that a report becomes verified when the responsible body has said cleared and at least one independent confirmation agrees. If the evidence says the problem is still there, the report reopens and the responsible body is told. If nobody responds, it stays as cleared but unverified, and is counted that way, so the verification figures stay honest. How many confirmations it takes is one of the decisions that can wait.</p>
 
     <h2 id="measuring">Measuring results</h2>
     <p>Every change of stage is saved with the time it happened. That's what makes it possible to work out the figures in your benchmarking example. For instance:</p>
     <ul>
-      <li>The median time to clear a fly-tip, for each council.</li>
+      <li>The median time to clear a fly-tip, for each council and each contractor.</li>
       <li>The share of reports cleared within five days.</li>
       <li>The share of cleared reports that were later verified.</li>
       <li>How often a problem returns to the same spot, meaning a new report close to one that was already fixed.</li>
@@ -181,21 +183,23 @@ sequenceDiagram
       <table>
         <thead><tr><th>Stage</th><th>What it adds</th><th>Hours</th><th>About how long</th></tr></thead>
         <tbody>
-          <tr><td>Foundation</td><td>A new database in a UK or EU location, a fuller set of issue types (fly-tipping, potholes, graffiti, abandoned vehicles, damaged infrastructure), smaller photos, and the groundwork for recording each stage change.</td><td>8 to 16</td><td>1 to 1.5 weeks</td></tr>
+          <tr><td>Foundation</td><td>A new database in a UK or EU location, a fuller set of issue types (fly-tipping, potholes, graffiti, abandoned vehicles, damaged infrastructure), smaller photos, councils and their contractors set up as responsible bodies, and the groundwork for recording each stage change and each intervention (what was done to fix a problem, and what it cost).</td><td>10 to 20</td><td>1 to 2 weeks</td></tr>
           <tr><td>Community</td><td>The "is this the same problem?" check, a count of people backing a report, and a public feed showing each report's progress.</td><td>12 to 24</td><td>1.5 to 2.5 weeks</td></tr>
-          <tr><td>Staff dashboard</td><td>Sign-in for staff, a list, map and filters for each council's area, and buttons to update a report's stage.</td><td>20 to 35</td><td>2 to 3.5 weeks</td></tr>
+          <tr><td>Staff dashboard</td><td>Sign-in for staff, a list, map and filters for each body's area, buttons to update a report's stage, and a way to note what was done and what it cost.</td><td>24 to 40</td><td>2.5 to 4 weeks</td></tr>
           <tr><td>AI help</td><td>Suggested categories with a confidence level, checked by staff. Needs extra time to tune on real reports.</td><td>10 to 20</td><td>1 to 2 weeks</td></tr>
-          <tr><td>Routing and checking fixes</td><td>Automatic routing to the right council for the pilot area, requests to confirm a fix, and the verification rule.</td><td>25 to 45</td><td>2.5 to 4.5 weeks</td></tr>
-          <tr><td>Comparing councils</td><td>Public comparison pages. Needs months of real data first, so I haven't sized it.</td><td>Later</td><td>Later</td></tr>
+          <tr><td>Routing and checking fixes</td><td>Automatic routing to the right council or contractor for the pilot area, requests to confirm a fix, and the verification rule.</td><td>27 to 49</td><td>2.5 to 5 weeks</td></tr>
+          <tr><td>More AI checks</td><td>Naming the type of waste, estimating how much there is, and flagging items that look hazardous so they're escalated. Needs plenty of real reports to tune against, so I haven't sized it.</td><td>Later</td><td>Later</td></tr>
+          <tr><td>Following an area</td><td>Alerts about problems near a place, for example within a mile of a village, and a view of an area's open problems for community groups. Needs a way to send alerts, so it comes after the core stages.</td><td>Later</td><td>Later</td></tr>
+          <tr><td>Comparing performance</td><td>Public pages with comparable performance and outcome measures for councils and contractors. Needs months of real data first, so I haven't sized it.</td><td>Later</td><td>Later</td></tr>
         </tbody>
       </table>
     </div>
 
-    <p>The first three stages come to roughly 40 to 75 hours, or 4 to 7.5 weeks. With AI help it's 50 to 95 hours, or 5 to 9.5 weeks. These are rough guesses and could be out by half again either way. They assume about 10 hours a week on Resolve UK, because my time is shared with Celestial Companions. The routing stage also depends on a council taking part, so no number of hours can promise it.</p>
+    <p>The first three stages come to roughly 46 to 84 hours, or 4.5 to 8.5 weeks. With AI help it's 56 to 104 hours, or 5.5 to 10.5 weeks. These are rough guesses and could be out by half again either way. They assume about 10 hours a week on Resolve UK, because my time is shared with Celestial Companions. The routing stage also depends on a council taking part, so no number of hours can promise it.</p>
 
     <figure>
       <div class="chart">
-        <div class="wf" role="img" aria-label="Schedule in weeks at about 10 hours a week: Foundation weeks 1 to 2.5, Community weeks 2.5 to 4.5, Staff dashboard weeks 4.5 to 7.5, AI help weeks 7.5 to 9, Routing and checking fixes weeks 9 to 12.5, which also depends on a council.">
+        <div class="wf" role="img" aria-label="Schedule in weeks at about 10 hours a week: Foundation weeks 1 to 2.5, Community weeks 2.5 to 4.5, Staff dashboard weeks 4.5 to 7.5, AI help weeks 7.5 to 9, Routing and checking fixes weeks 9 to 13, which also depends on a council.">
           <div class="wf-corner">Week</div>
           <div class="wf-weeks">
             <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span>
@@ -214,11 +218,31 @@ sequenceDiagram
           <div class="wf-track"><div class="wf-bar" style="grid-column: 14 / 17">1.5 wk</div></div>
 
           <div class="wf-label">Routing and checking fixes<small>needs a council</small></div>
-          <div class="wf-track"><div class="wf-bar uncertain" style="grid-column: 17 / 24">3.5 wk</div></div>
+          <div class="wf-track"><div class="wf-bar uncertain" style="grid-column: 17 / 25">4 wk</div></div>
         </div>
       </div>
       <figcaption>Figure 4. The stages laid out over weeks, at about 10 hours a week. The dashed bar depends on finding a council. If Celestial Companions takes priority for a while, everything moves later.</figcaption>
     </figure>
+
+    <h2 id="leads">Where this leads</h2>
+    <p>Your second email described three phases. This Blueprint builds the first one. The other two come later, because they depend on having real data.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Phase</th><th>What it covers</th><th>When</th></tr></thead>
+        <tbody>
+          <tr><td>1. Report, route, track, resolve, verify</td><td>Everything in the stages above.</td><td>This Blueprint</td></tr>
+          <tr><td>2. Analyse, compare, spot recurring problems</td><td>Hotspots, comparable performance measures for councils and contractors, and places where the same problem keeps coming back.</td><td>After months of real reports</td></tr>
+          <tr><td>3. Predict, intervene, measure</td><td>Predictive hotspot identification and preventative intervention, then checking whether the intervention worked.</td><td>Later, once there's enough good data</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>Prediction isn't part of the first build. It needs enough good-quality data to build and check, so I'd put it on the roadmap rather than promise it at launch.</p>
+    <p>What makes all of this possible is the record. As you put it, the valuable part is the closed loop: the problem, the response, what was done about it, the outcome, and whether it came back. So from the first real report, the system saves each stage change with its time, and each intervention with what was done, who did it and what it cost, even though the analysis comes later.</p>
+    <p>Over time that data could be useful to government, waste operators, insurers, housing associations, researchers and the media. That's a question for later, but keeping the records consistent from the start is what keeps it open.</p>
+    <p>One item on your list, repeat offenders, needs care, because tying reports to individual people raises data protection questions. I'd start with repeat locations, which don't.</p>
+    <p>Once there are enough real reports to tune against, the AI checks can also name the type of waste, estimate how much there is, and flag items that look hazardous so they're escalated. Following an area, for example "tell me about problems within a mile of my village", is planned for later too. It needs a way to send alerts, so it comes after the core stages.</p>
 
     <h2 id="answers">Your questions, and my answers</h2>
     <p>Here are the questions you asked after the Week 1 report, with my answers.</p>
@@ -227,7 +251,7 @@ sequenceDiagram
     <p>Sorry, that section was too technical. It just means what's finished and working. You can open the prototype on a phone, report a problem with a photo and a location, and see it show up in a list. I've rewritten it in plain language in the <a href="../week-1/">Week 1 report</a>.</p>
 
     <h3>What are the timing requirements for the next steps?</h3>
-    <p>I can't give firm dates yet, but the first three stages should take about 4 to 7.5 weeks, or up to 9.5 with the AI part. That's at about 10 hours a week on Resolve UK, because my time is split with Celestial Companions. If you'd rather one of the two came first, tell me and I'll adjust. Anything that needs a council can't be dated until one is on board. The full breakdown is under <a href="#order">Order of work</a>.</p>
+    <p>I can't give firm dates yet, but the first three stages should take about 4.5 to 8.5 weeks, or up to 10.5 with the AI part. That's at about 10 hours a week on Resolve UK, because my time is split with Celestial Companions. If you'd rather one of the two came first, tell me and I'll adjust. Anything that needs a council can't be dated until one is on board. The full breakdown is under <a href="#order">Order of work</a>.</p>
 
     <h3>Where is the data, and what would it take to move it?</h3>
     <p>At the moment it's in Seoul, South Korea. I picked that region for convenience while building, and it only holds test reports. It needs to move to the UK or EU before any real reports come in. UK law doesn't ban storing data abroad, but it adds extra requirements, and councils will most likely ask for UK or EU hosting.</p>
@@ -297,7 +321,7 @@ flowchart TB
   PWA -->|"map images"| Tiles
   DB -->|"new report event"| Fn
   Fn -->|"photo + category question"| AI
-  Fn -->|"authority + suggestion"| DB
+  Fn -->|"responsible body + suggestion"| DB
       </pre>
       <figcaption>Figure 5. Where the data lives and which parts talk to each other.</figcaption>
     </figure>
@@ -308,17 +332,22 @@ flowchart TB
     <figure>
       <pre class="mermaid">
 erDiagram
-  AUTHORITIES ||--o{ REPORTS : "is responsible for"
-  AUTHORITIES ||--o{ STAFF_PROFILES : employs
+  RESPONSIBLE_BODIES ||--o{ REPORTS : "is responsible for"
+  RESPONSIBLE_BODIES ||--o{ STAFF_PROFILES : employs
+  RESPONSIBLE_BODIES |o--o{ RESPONSIBLE_BODIES : "contractor works for"
+  RESPONSIBLE_BODIES |o--o{ INTERVENTIONS : "carried out by"
   CATEGORIES ||--o{ REPORTS : classifies
   REPORTS ||--|{ REPORT_EVENTS : "has history"
   REPORTS ||--o{ REPORT_SUPPORTS : "confirmed by"
-  AUTHORITIES {
+  REPORTS ||--o{ INTERVENTIONS : "fixed by"
+  RESPONSIBLE_BODIES {
     uuid id PK
     text name
-    text tier "unitary, county or district"
+    text kind "council or contractor"
+    text tier "unitary, county or district (councils only)"
+    uuid works_for_id FK "the council a contractor works for"
     text_array functions "highways, waste, streetscene"
-    geometry boundary
+    geometry boundary "councils only"
   }
   CATEGORIES {
     text code PK
@@ -333,7 +362,7 @@ erDiagram
     real location_accuracy_m
     text location_source "gps or manual"
     text photo_path
-    uuid authority_id FK "empty until routed"
+    uuid responsible_body_id FK "empty until routed"
     text current_status "copied from latest event"
     text ai_category
     real ai_confidence
@@ -358,25 +387,34 @@ erDiagram
     text kind "same_issue, still_there or fixed"
     timestamptz created_at
   }
+  INTERVENTIONS {
+    uuid id PK
+    uuid report_id FK
+    uuid body_id FK
+    text type "cleared, camera, barrier, signage, enforcement or other"
+    text description
+    integer cost_pence "optional"
+    timestamptz done_at
+  }
   STAFF_PROFILES {
     uuid id PK "same as the sign-in id"
-    uuid authority_id FK
-    text role "staff, authority_admin or resolve_admin"
+    uuid body_id FK
+    text role "staff, body_admin or resolve_admin"
     text display_name
   }
       </pre>
-      <figcaption>Figure 6. The tables and how they relate. Photos are stored by path, not full URL, so moving to a new project never breaks a link. Location accuracy is kept so the nearby check can allow for GPS error.</figcaption>
+      <figcaption>Figure 6. The tables and how they relate. Photos are stored by path, not full URL, so moving to a new project never breaks a link. Location accuracy is kept so the nearby check can allow for GPS error. Interventions record what was done about a problem, by whom, and what it cost.</figcaption>
     </figure>
-    <p>Routing picks the authority whose boundary contains the point and whose responsibilities include the issue type. That handles areas where the county and district split the work. Later additions, not in this stage, are an <code>area_follows</code> table ("tell me about problems within a mile") and a cost per report.</p>
+    <p>Routing picks the council whose boundary contains the point and whose responsibilities include the issue type. If that council has a contractor for that kind of work, the report goes to the contractor. That handles areas where the county and district split the work. Following an area will need an extra <code>area_follows</code> table, which comes with that later stage.</p>
 
     <h3>Who can see and change what</h3>
     <div class="table-wrap">
       <table>
         <thead><tr><th>Who</th><th>Reports</th><th>History</th><th>Photos</th></tr></thead>
         <tbody>
-          <tr><td>Public</td><td>Read. Create with type, description, location and photo only. Cannot set status or authority.</td><td>Read the status timeline.</td><td>Read (decision pending).</td></tr>
-          <tr><td>Council staff</td><td>Read reports for their own authority.</td><td>Add entries for their own authority.</td><td>Upload evidence photos.</td></tr>
-          <tr><td>Resolve admin</td><td>Everything, plus manage authorities and issue types.</td><td>Everything.</td><td>Everything.</td></tr>
+          <tr><td>Public</td><td>Read. Create with type, description, location and photo only. Cannot set status or responsible body.</td><td>Read the status timeline.</td><td>Read (decision pending).</td></tr>
+          <tr><td>Staff (council or contractor)</td><td>Read reports for their own body.</td><td>Add entries and record interventions for their own body.</td><td>Upload evidence photos.</td></tr>
+          <tr><td>Resolve admin</td><td>Everything, plus manage responsible bodies and issue types.</td><td>Everything.</td><td>Everything.</td></tr>
           <tr><td>Nobody</td><td>Deletes reports.</td><td>Edits or deletes past entries (admin exceptions only).</td><td>Not applicable.</td></tr>
         </tbody>
       </table>
