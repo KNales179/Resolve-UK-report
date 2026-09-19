@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en-GB">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -7,221 +7,44 @@
 <title>Resolve UK Reports</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<style>
-  :root {
-    color-scheme: light dark;
-    --bg: #f6f5f1;
-    --surface: #ffffff;
-    --surface-2: #f0efe9;
-    --ink: #1b201c;
-    --muted: #5c655e;
-    --line: #dfdcd2;
-    --accent: #155b34;
-    --accent-ink: #ffffff;
-    --accent-soft: #e3f0e7;
-    --accent-soft-line: #c3ddca;
-    --font-display: 'Archivo', system-ui, sans-serif;
-    --font-body: 'Source Serif 4', Georgia, serif;
-    --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
-  }
-
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --bg: #14170f;
-      --surface: #1b2018;
-      --surface-2: #20261d;
-      --ink: #eeeee6;
-      --muted: #a3ab9c;
-      --line: #333a2f;
-      --accent: #4fb47e;
-      --accent-ink: #0d1a12;
-      --accent-soft: #1f3327;
-      --accent-soft-line: #2c4a37;
-    }
-  }
-
-  * { box-sizing: border-box; }
-
-  body {
-    margin: 0;
-    background: var(--bg);
-    color: var(--ink);
-    font-family: var(--font-body);
-    padding-inline: 20px;
-    padding-block: 2.5rem 4rem;
-    line-height: 1.6;
-  }
-
-  .page {
-    max-width: 760px;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    gap: 2.5rem;
-  }
-
-  .masthead {
-    display: flex;
-    flex-direction: column;
-    gap: 0.9rem;
-    padding-bottom: 1.6rem;
-    border-bottom: 2px solid var(--ink);
-  }
-
-  .eyebrow {
-    font-family: var(--font-mono);
-    font-size: 0.72rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--muted);
-  }
-
-  h1 {
-    font-family: var(--font-display);
-    font-weight: 800;
-    font-size: clamp(1.9rem, 5vw, 2.6rem);
-    letter-spacing: -0.01em;
-    margin: 0;
-    text-wrap: balance;
-  }
-
-  p { margin: 0; max-width: 62ch; }
-  .lede { color: var(--muted); font-size: 1.02rem; }
-
-  .live-link {
-    align-self: flex-start;
-    font-family: var(--font-mono);
-    font-size: 0.8rem;
-    font-weight: 600;
-    color: var(--accent-ink);
-    background: var(--accent);
-    text-decoration: none;
-    padding: 0.45rem 0.9rem;
-    border-radius: 999px;
-  }
-
-  .live-link:hover { opacity: 0.9; }
-
-  h2 {
-    font-family: var(--font-display);
-    font-weight: 700;
-    font-size: 1.1rem;
-    margin: 0 0 0.75rem;
-  }
-
-  ul.reports {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    border-top: 1px solid var(--line);
-  }
-
-  ul.reports li { border-bottom: 1px solid var(--line); }
-
-  ul.reports a {
-    display: grid;
-    grid-template-columns: 9.5rem 1fr auto;
-    gap: 0.25rem 1.25rem;
-    align-items: baseline;
-    padding: 1.1rem 0.25rem;
-    color: inherit;
-    text-decoration: none;
-  }
-
-  ul.reports a:hover { background: var(--surface-2); }
-  ul.reports a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-
-  .when {
-    font-family: var(--font-mono);
-    font-size: 0.78rem;
-    color: var(--muted);
-  }
-
-  .title {
-    font-family: var(--font-display);
-    font-weight: 700;
-    font-size: 1.05rem;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 0.25rem 0.6rem;
-  }
-
-  .tag {
-    font-family: var(--font-mono);
-    font-size: 0.66rem;
-    font-weight: 600;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    background: var(--accent-soft);
-    color: var(--accent);
-    border: 1px solid var(--accent-soft-line);
-    padding: 0.1rem 0.5rem;
-    border-radius: 999px;
-  }
-
-  .desc {
-    grid-column: 2;
-    color: var(--muted);
-    font-size: 0.93rem;
-  }
-
-  .arrow {
-    grid-row: 1;
-    grid-column: 3;
-    font-family: var(--font-mono);
-    color: var(--accent);
-  }
-
-  footer {
-    border-top: 1px solid var(--line);
-    padding-top: 1.1rem;
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    color: var(--muted);
-  }
-
-  @media (max-width: 560px) {
-    ul.reports a { grid-template-columns: 1fr auto; }
-    .desc { grid-column: 1 / -1; }
-    .when { grid-column: 1 / -1; }
-  }
-</style>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+<script src="assets/site.js"></script>
 </head>
 <body>
-<div class="page">
+<div class="wrap index">
 
-  <header class="masthead">
-    <span class="eyebrow">Development reports</span>
+  <div class="topbar">
+    <span>Resolve UK</span>
+    <button type="button" class="theme-toggle">Dark mode</button>
+  </div>
+
+  <header class="doc">
     <h1>Resolve UK Reports</h1>
-    <p class="lede">Progress reports and planning documents for the Resolve UK citizen environmental-reporting platform, newest first.</p>
-    <a class="live-link" href="https://resolve-uk-ten.vercel.app/" target="_blank" rel="noopener">Live prototype: resolve-uk-ten.vercel.app</a>
+    <p class="byline">Progress reports and planning documents, prepared for Ms Kay French</p>
   </header>
 
   <main>
-    <h2>All reports</h2>
-    <ul class="reports">
+    <section class="featured">
+      <p class="label">Latest, 19 September 2026</p>
+      <h2><a href="blueprint/">Resolve UK Blueprint</a></h2>
+      <p>Our plan for the next stage of Resolve UK. It explains how a report gets from someone's phone to a confirmed fix, what we would build and in what order, and three questions we'd like your help with.</p>
+      <p><a class="button" href="blueprint/">Read the blueprint</a></p>
+    </section>
+
+    <h2 class="plain">Earlier reports</h2>
+    <ul class="report-list">
       <li>
-        <a href="blueprint/">
-          <span class="when">19 Sept 2026</span>
-          <span class="title">Resolve UK Blueprint <span class="tag">Planning</span></span>
-          <span class="arrow" aria-hidden="true">&rarr;</span>
-          <span class="desc">Draft system plan: report lifecycle, process flows, data model, access rules, build phases and the decisions still open.</span>
-        </a>
-      </li>
-      <li>
-        <a href="week-1/">
-          <span class="when">15&ndash;19 Sept 2026</span>
-          <span class="title">Week 1 Report <span class="tag">Weekly report</span></span>
-          <span class="arrow" aria-hidden="true">&rarr;</span>
-          <span class="desc">What shipped this week, the development plan, known risks, and questions for Kay.</span>
-        </a>
+        <a href="week-1/">Week 1 Report</a>
+        <span class="when">15 to 19 September 2026</span>
+        <p>What we built in the first week, what comes next, and the questions we asked.</p>
       </li>
     </ul>
+
+    <p>You can try the current prototype at <a href="https://resolve-uk-ten.vercel.app/" target="_blank" rel="noopener">resolve-uk-ten.vercel.app</a>.</p>
   </main>
 
-  <footer>For viewing only. Not for copying or redistribution.</footer>
+  <footer class="doc">For viewing only. Not for copying or redistribution.</footer>
 
 </div>
 </body>

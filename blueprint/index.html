@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en-GB">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -7,577 +7,250 @@
 <title>Resolve UK Blueprint</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --bg: #f6f5f1;
-    --surface: #ffffff;
-    --surface-2: #f0efe9;
-    --ink: #1b201c;
-    --muted: #5c655e;
-    --line: #dfdcd2;
-    --accent: #155b34;
-    --accent-ink: #ffffff;
-    --accent-soft: #e3f0e7;
-    --accent-soft-line: #c3ddca;
-    --warn: #9a5b12;
-    --warn-ink: #ffffff;
-    --warn-soft: #f6e9d8;
-    --shadow: 0 1px 2px rgba(27,32,28,0.06), 0 8px 24px rgba(27,32,28,0.05);
-    --font-display: 'Archivo', system-ui, sans-serif;
-    --font-body: 'Source Serif 4', Georgia, serif;
-    --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
-  }
-
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) {
-      --bg: #14170f;
-      --surface: #1b2018;
-      --surface-2: #20261d;
-      --ink: #eeeee6;
-      --muted: #a3ab9c;
-      --line: #333a2f;
-      --accent: #4fb47e;
-      --accent-ink: #0d1a12;
-      --accent-soft: #1f3327;
-      --accent-soft-line: #2c4a37;
-      --warn: #e3ab5c;
-      --warn-ink: #1b1408;
-      --warn-soft: #3a2e18;
-      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.35);
-    }
-  }
-
-  :root[data-theme="dark"] {
-    --bg: #14170f;
-    --surface: #1b2018;
-    --surface-2: #20261d;
-    --ink: #eeeee6;
-    --muted: #a3ab9c;
-    --line: #333a2f;
-    --accent: #4fb47e;
-    --accent-ink: #0d1a12;
-    --accent-soft: #1f3327;
-    --accent-soft-line: #2c4a37;
-    --warn: #e3ab5c;
-    --warn-ink: #1b1408;
-    --warn-soft: #3a2e18;
-    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.35);
-  }
-
-  * { box-sizing: border-box; }
-
-  body {
-    background: var(--bg);
-    color: var(--ink);
-    font-family: var(--font-body);
-    padding-inline: 20px;
-    padding-block: 2.5rem 4rem;
-    line-height: 1.6;
-  }
-
-  .page {
-    max-width: 860px;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    gap: 2.75rem;
-  }
-
-  .masthead {
-    display: flex;
-    flex-direction: column;
-    gap: 0.9rem;
-    padding-bottom: 1.6rem;
-    border-bottom: 2px solid var(--ink);
-  }
-
-  .eyebrow {
-    font-family: var(--font-mono);
-    font-size: 0.72rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--muted);
-  }
-
-  h1 {
-    font-family: var(--font-display);
-    font-weight: 800;
-    font-size: clamp(1.9rem, 5vw, 2.6rem);
-    letter-spacing: -0.01em;
-    margin: 0;
-    text-wrap: balance;
-  }
-
-  .meta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.4rem 1.5rem;
-    font-family: var(--font-mono);
-    font-size: 0.8rem;
-    color: var(--muted);
-  }
-
-  .meta strong { color: var(--ink); font-weight: 600; }
-
-  .toc {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.4rem 0.5rem;
-    font-family: var(--font-mono);
-    font-size: 0.76rem;
-  }
-
-  .toc a {
-    color: var(--accent);
-    text-decoration: none;
-    border: 1px solid var(--accent-soft-line);
-    background: var(--accent-soft);
-    padding: 0.2rem 0.65rem;
-    border-radius: 999px;
-  }
-
-  .toc a:hover { text-decoration: underline; }
-
-  section {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
-
-  h2 {
-    font-family: var(--font-display);
-    font-weight: 700;
-    font-size: 1.35rem;
-    margin: 0;
-    scroll-margin-top: 1rem;
-  }
-
-  h3 {
-    font-family: var(--font-display);
-    font-weight: 600;
-    font-size: 1rem;
-    margin: 0.4rem 0 0;
-    color: var(--accent);
-  }
-
-  p { margin: 0; max-width: 68ch; }
-
-  .lede { color: var(--muted); font-size: 1.02rem; }
-
-  ul.plain {
-    margin: 0;
-    padding-left: 1.2rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.4rem;
-    max-width: 72ch;
-  }
-
-  ul.plain li::marker { color: var(--accent); }
-
-  code {
-    font-family: var(--font-mono);
-    font-size: 0.85em;
-    background: var(--surface-2);
-    padding: 0.05em 0.35em;
-    border-radius: 4px;
-  }
-
-  .note {
-    background: var(--warn-soft);
-    border: 1px solid var(--line);
-    border-radius: 8px;
-    padding: 1rem 1.15rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  .note strong { font-family: var(--font-display); }
-  .note ul { margin: 0; padding-left: 1.2rem; display: flex; flex-direction: column; gap: 0.3rem; font-size: 0.93rem; }
-
-  .table-wrap {
-    overflow-x: auto;
-    border: 1px solid var(--line);
-    border-radius: 8px;
-    background: var(--surface);
-  }
-
-  table {
-    border-collapse: collapse;
-    width: 100%;
-    min-width: 560px;
-    font-family: var(--font-display);
-    font-size: 0.88rem;
-  }
-
-  th, td {
-    text-align: left;
-    vertical-align: top;
-    padding: 0.6rem 0.8rem;
-    border-bottom: 1px solid var(--line);
-  }
-
-  th {
-    font-family: var(--font-mono);
-    font-size: 0.7rem;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--muted);
-    background: var(--surface-2);
-    font-weight: 600;
-  }
-
-  tr:last-child td { border-bottom: none; }
-  td:first-child { font-weight: 600; white-space: nowrap; }
-  td { color: var(--ink); }
-  td.muted { color: var(--muted); }
-
-  figure { margin: 0; display: flex; flex-direction: column; gap: 0.5rem; }
-
-  pre.mermaid {
-    margin: 0;
-    background: var(--surface);
-    border: 1px solid var(--line);
-    border-radius: 10px;
-    padding: 1rem;
-    overflow-x: auto;
-    text-align: center;
-  }
-
-  figcaption {
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    color: var(--muted);
-    max-width: 80ch;
-  }
-
-  .wf {
-    min-width: 760px;
-    display: grid;
-    grid-template-columns: 11.5rem 1fr;
-    align-items: center;
-    row-gap: 0.5rem;
-    padding: 1rem;
-    font-family: var(--font-display);
-    font-size: 0.86rem;
-  }
-
-  .wf-label {
-    font-weight: 600;
-    line-height: 1.25;
-    padding-right: 0.75rem;
-  }
-
-  .wf-label small {
-    display: block;
-    font-family: var(--font-mono);
-    font-size: 0.68rem;
-    font-weight: 400;
-    color: var(--warn);
-    margin-top: 0.15rem;
-  }
-
-  .wf-corner {
-    font-family: var(--font-mono);
-    font-size: 0.7rem;
-    font-weight: 500;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--muted);
-  }
-
-  .wf-weeks {
-    display: grid;
-    grid-template-columns: repeat(12, 1fr);
-    font-family: var(--font-mono);
-    font-size: 0.7rem;
-    color: var(--muted);
-    border-bottom: 1px solid var(--line);
-    padding-bottom: 0.3rem;
-  }
-
-  .wf-weeks span { padding-left: 0.35rem; }
-
-  .wf-track {
-    display: grid;
-    grid-template-columns: repeat(24, 1fr);
-    height: 2.1rem;
-    background-image: linear-gradient(to right, var(--line) 1px, transparent 1px);
-    background-size: calc(100% / 12) 100%;
-    border-right: 1px solid var(--line);
-  }
-
-  .wf-bar {
-    grid-row: 1;
-    align-self: center;
-    height: 1.6rem;
-    display: flex;
-    align-items: center;
-    padding: 0 0.5rem;
-    border-radius: 6px;
-    background: var(--accent);
-    color: var(--accent-ink);
-    font-family: var(--font-mono);
-    font-size: 0.72rem;
-    font-weight: 600;
-    white-space: nowrap;
-    overflow: hidden;
-  }
-
-  .wf-bar.council {
-    background: var(--warn);
-    color: var(--warn-ink);
-  }
-
-  .questions {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 0.65rem;
-  }
-
-  .questions li {
-    display: flex;
-    gap: 0.85rem;
-    align-items: flex-start;
-    background: var(--surface);
-    border: 1px solid var(--line);
-    border-radius: 8px;
-    padding: 0.9rem 1rem;
-    box-shadow: var(--shadow);
-  }
-
-  .qmark {
-    flex-shrink: 0;
-    width: 1.35rem;
-    height: 1.35rem;
-    border-radius: 50%;
-    background: var(--warn-soft);
-    color: var(--warn);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.78rem;
-    font-weight: 700;
-    margin-top: 0.1rem;
-  }
-
-  .question-text strong {
-    font-family: var(--font-display);
-    font-weight: 600;
-    font-size: 0.98rem;
-    display: block;
-    margin-bottom: 0.2rem;
-  }
-
-  .question-text span {
-    color: var(--muted);
-    font-size: 0.92rem;
-  }
-
-  .question-text .unblocks {
-    display: block;
-    margin-top: 0.4rem;
-    font-family: var(--font-mono);
-    font-size: 0.72rem;
-    color: var(--accent);
-  }
-
-  footer {
-    border-top: 1px solid var(--line);
-    padding-top: 1.1rem;
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    color: var(--muted);
-  }
-</style>
-
-<style>:root{color-scheme:light dark}body{margin:0}img{max-width:100%}.back{align-self:flex-start;font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:.76rem;color:var(--accent);text-decoration:none}.back:hover{text-decoration:underline}</style>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/site.css">
+<script src="../assets/site.js"></script>
 </head>
 <body>
-<div class="page">
+<div class="wrap">
 
-  <header class="masthead">
-    <a class="back" href="../">&larr; All reports</a>
-    <span class="eyebrow">System blueprint · Phase 2</span>
+  <div class="topbar">
+    <a href="../">&larr; All reports</a>
+    <button type="button" class="theme-toggle">Dark mode</button>
+  </div>
+
+  <header class="doc">
     <h1>Resolve UK Blueprint</h1>
-    <div class="meta">
-      <span>Status: <strong>Draft for review</strong></span>
-      <span>Prepared: <strong>19 Sept 2026</strong></span>
-      <span>Builds on: <strong>Week 1 prototype</strong></span>
-    </div>
-    <nav class="toc" aria-label="On this page">
-      <a href="#roles">Who uses it</a>
-      <a href="#lifecycle">Lifecycle</a>
-      <a href="#submit">Submitting</a>
-      <a href="#verify">Verifying a fix</a>
-      <a href="#flow">Data flow</a>
-      <a href="#model">Data model</a>
-      <a href="#access">Access rules</a>
-      <a href="#plan">Build plan</a>
-      <a href="#decisions">Decisions</a>
-      <a href="#ask">Questions for Ms Kay</a>
-      <a href="#handover">Handover</a>
-    </nav>
+    <p class="byline">Prepared for Ms Kay French &middot; Draft 1 &middot; 19 September 2026</p>
+    <p class="contents">
+      <a href="#summary">Summary</a> &middot;
+      <a href="#moves">How a report moves</a> &middot;
+      <a href="#sending">Sending in a report</a> &middot;
+      <a href="#checking">Checking a fix</a> &middot;
+      <a href="#measuring">Measuring results</a> &middot;
+      <a href="#order">Order of work</a> &middot;
+      <a href="#questions">Questions for Ms Kay</a> &middot;
+      <a href="#appendix">Technical appendix</a>
+    </p>
   </header>
 
-  <section>
-    <p class="lede">This turns the Week 1 prototype into the loop Kay described: report, route, track, verify. Nothing here is built yet. Review it, change it, and then we build from it.</p>
-    <div class="note">
-      <strong>What this plan assumes, and what it doesn't know</strong>
-      <ul>
-        <li>It follows Kay's answers: a dashboard checked manually to start with, the authority reports completion and then the public or AI verifies it, and the data must be UK-compliant.</li>
-        <li>Hour estimates are rough guesses (about ±50%). They assume around 10 hours a week on Resolve UK, because development time is shared with Celestial Companions.</li>
-        <li>Service prices, licence terms and which council handles what come from memory. Check them before committing to anything.</li>
-      </ul>
-    </div>
-  </section>
+  <main>
 
-  <section id="roles">
-    <h2>Who uses it</h2>
-    <div class="table-wrap">
-      <table>
-        <thead><tr><th>Who</th><th>What they do</th><th>Signed in?</th><th>When</th></tr></thead>
-        <tbody>
-          <tr><td>Citizen</td><td class="muted">Reports a problem, says "same issue" on an existing report, later confirms whether a fix really happened.</td><td class="muted">No. Identified by a device token.</td><td class="muted">Now</td></tr>
-          <tr><td>Authority staff</td><td class="muted">Sees reports for their area, acknowledges, schedules, marks cleared. Could be council staff or the Resolve team acting for the council. Undecided, so the design supports both.</td><td class="muted">Yes</td><td class="muted">2C</td></tr>
-          <tr><td>Resolve admin</td><td class="muted">Manages authorities, issue types and staff accounts.</td><td class="muted">Yes</td><td class="muted">2C</td></tr>
-          <tr><td>Automation</td><td class="muted">Suggests a category, finds the responsible authority, compares before and after photos.</td><td class="muted">System</td><td class="muted">2D–3</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </section>
+    <h2 id="summary" style="margin-top:0">Summary</h2>
+    <p>This is our plan for taking Resolve UK from the working prototype to something councils can actually use. It covers how a report travels from a photo on someone's phone to a confirmed fix, what we would build and in what order, and a few questions we need your help with before going further.</p>
+    <p>It's based on the answers you sent after the Week 1 report. Nothing described here has been built yet, so please read it as a draft. If something is wrong or missing, tell us and we'll change the plan before we build.</p>
+    <p>In short:</p>
+    <ul>
+      <li>A resident reports a problem. Staff at the responsible council update its progress. Residents, helped by a photo-checking tool, confirm whether it was really fixed.</li>
+      <li>We would start with a safe home for the data and a dashboard for whoever handles reports. The first three stages come to about 4 to 7.5 weeks of work.</li>
+      <li>Anything involving a council depends on finding one that will take part, and we can't put a date on that yet.</li>
+    </ul>
+    <p>The time estimates are rough guesses. Prices, licence terms and which council covers what also still need checking before we rely on them.</p>
 
-  <section id="lifecycle">
-    <h2>Report lifecycle</h2>
-    <p class="lede">Every report moves through these states. The stages in the middle are Kay's own list; Duplicate, Rejected and Reopened cover what happens when things don't go smoothly.</p>
+    <h2 id="moves">How a report moves</h2>
+    <p>Every report goes through the same set of stages. The middle ones are the stages you described: reported, responsible body identified, acknowledged, clearance scheduled, cleared and outcome verified. We've added three for when things don't go smoothly: duplicate, rejected and reopened.</p>
+
     <figure>
       <pre class="mermaid">
 stateDiagram-v2
-  [*] --> Reported: citizen submits
+  state "Responsible body identified" as Routed
+  state "Clearance scheduled" as Scheduled
+  state "Outcome verified" as Verified
+  [*] --> Reported: resident sends it in
   Reported --> Duplicate: matches an existing report
-  Reported --> Rejected: not an issue, out of area, or unclear
-  Reported --> Routed: responsible body identified
-  Routed --> Acknowledged: authority acknowledges
-  Acknowledged --> Scheduled: clearance scheduled
-  Scheduled --> Cleared: authority reports completion
-  Acknowledged --> Cleared: fixed without a scheduling step
-  Cleared --> Verified: independent evidence confirms the fix
-  Cleared --> Reopened: evidence shows it is still there
-  Reopened --> Acknowledged: authority re-engages
+  Reported --> Rejected: not actionable
+  Reported --> Routed
+  Routed --> Acknowledged: council sees it
+  Acknowledged --> Scheduled: date set for the work
+  Scheduled --> Cleared: council says it's done
+  Acknowledged --> Cleared: fixed without a scheduled date
+  Cleared --> Verified: independent evidence agrees
+  Cleared --> Reopened: evidence says it is still there
+  Reopened --> Acknowledged: council picks it up again
   Verified --> [*]
   Duplicate --> [*]
   Rejected --> [*]
       </pre>
-      <figcaption>"Cleared" is the authority's claim. "Verified" needs independent evidence. The gap between the two is what makes "% verified as resolved" measurable.</figcaption>
+      <figcaption>Figure 1. The stages a report can move through.</figcaption>
     </figure>
+
+    <p>One distinction matters more than the rest. When a council marks a job as cleared, that's the council's own word. A report only becomes verified when someone independent, such as a resident or our photo check, agrees that it's fixed. Keeping those two apart is what lets us say how many fixes are genuinely confirmed.</p>
+
     <div class="table-wrap">
       <table>
-        <thead><tr><th>State</th><th>Shown to the public as</th><th>Who can set it</th></tr></thead>
+        <thead><tr><th>Stage</th><th>What it means</th><th>Who sets it</th></tr></thead>
         <tbody>
-          <tr><td>Reported</td><td class="muted">Reported</td><td class="muted">Citizen (creates the report)</td></tr>
-          <tr><td>Routed</td><td class="muted">Responsible body identified</td><td class="muted">Automation, or staff by hand</td></tr>
-          <tr><td>Acknowledged</td><td class="muted">Acknowledged</td><td class="muted">Authority staff</td></tr>
-          <tr><td>Scheduled</td><td class="muted">Clearance scheduled</td><td class="muted">Authority staff</td></tr>
-          <tr><td>Cleared</td><td class="muted">Cleared, not yet verified</td><td class="muted">Authority staff</td></tr>
-          <tr><td>Verified</td><td class="muted">Outcome verified</td><td class="muted">Rule based on community and AI evidence</td></tr>
-          <tr><td>Reopened</td><td class="muted">Still an issue</td><td class="muted">Rule based on evidence, reviewed by staff</td></tr>
-          <tr><td>Duplicate</td><td class="muted">Merged with another report</td><td class="muted">Citizen at submit, or staff</td></tr>
-          <tr><td>Rejected</td><td class="muted">Not actionable</td><td class="muted">Authority staff</td></tr>
+          <tr><td>Reported</td><td>Someone has sent it in.</td><td>The resident</td></tr>
+          <tr><td>Responsible body identified</td><td>We know which council should deal with it.</td><td>Set automatically, or by staff</td></tr>
+          <tr><td>Acknowledged</td><td>The council has seen it.</td><td>Council staff</td></tr>
+          <tr><td>Clearance scheduled</td><td>A date for the work is set.</td><td>Council staff</td></tr>
+          <tr><td>Cleared</td><td>The council says the job is done.</td><td>Council staff</td></tr>
+          <tr><td>Outcome verified</td><td>Independent evidence shows it's fixed.</td><td>A rule that weighs the evidence</td></tr>
+          <tr><td>Reopened</td><td>Evidence shows the problem is still there.</td><td>The same rule, checked by staff</td></tr>
+          <tr><td>Duplicate</td><td>It matches a report already made.</td><td>The resident when they send it, or staff</td></tr>
+          <tr><td>Rejected</td><td>Not something the council can act on.</td><td>Council staff</td></tr>
         </tbody>
       </table>
     </div>
-  </section>
 
-  <section id="submit">
-    <h2>Submitting a report</h2>
-    <p class="lede">Compared with the prototype, this adds a nearby-report check, photo shrinking, a history entry, automatic routing and an AI suggestion.</p>
+    <h2 id="sending">Sending in a report</h2>
+    <p>In the prototype, someone takes a photo, chooses a type and marks the spot. The next version adds a few steps behind the scenes.</p>
+
     <figure>
       <pre class="mermaid">
 flowchart TD
-  subgraph Citizen
+  subgraph Resident
     A["Open the app"] --> B["Take or choose a photo"]
-    B --> C["Set location: GPS or drop a pin"]
-    C --> D["Pick issue type, add short description"]
+    B --> C["Set the location: GPS or drop a pin"]
+    C --> D["Pick the type, add a short description"]
   end
-  subgraph App["Resolve UK app"]
+  subgraph App["The app"]
     D --> E{"Similar open report nearby?"}
-    E -->|"Yes, same issue"| F["Add support to the existing report"]
-    E -->|"No or not sure"| G["Shrink photo, then upload it"]
+    E -->|"Yes, same problem"| F["Add to the existing report"]
+    E -->|"No or not sure"| G["Shrink the photo and upload it"]
   end
-  subgraph DB["Database"]
-    G --> H["Save report + first history entry: Reported"]
-    F --> I["Save the support against that report"]
+  subgraph DB["Saved"]
+    G --> H["Save the report and its first history entry: Reported"]
+    F --> I["Save the extra voice against that report"]
   end
-  subgraph Auto["Automatic steps"]
-    H --> J["Find responsible authority from location + issue type"]
-    H --> K["AI suggests a category + confidence"]
-    J --> L["History entry: Routed"]
+  subgraph Auto["Behind the scenes"]
+    H --> J["Work out the responsible council from the location and type"]
+    H --> K["Suggest a category from the photo"]
+    J --> L["History entry: responsible body identified"]
     K --> M{"Confident?"}
     M -->|"Yes"| N["Keep the suggestion"]
-    M -->|"No"| O["Flag for staff review"]
+    M -->|"No"| O["Flag for a person to check"]
   end
-  subgraph Staff["Authority staff"]
+  subgraph Staff["Council staff"]
     L --> P["Report appears on their dashboard"]
     N --> P
     O --> P
   end
       </pre>
-      <figcaption>The nearby check asks the citizen rather than merging silently: a wrong automatic merge would hide a real separate problem.</figcaption>
+      <figcaption>Figure 2. What happens when someone sends in a report.</figcaption>
     </figure>
-    <ul class="plain">
-      <li><strong>Nearby check:</strong> same issue type, still open, within a set distance. Start at roughly 10–20 m for potholes and 25–50 m for the rest, always above typical GPS error. The distances get tuned with real data.</li>
-      <li><strong>Routing rule:</strong> the authority whose boundary contains the point <em>and</em> whose responsibilities include this issue type. This handles two-tier areas, where the county handles potholes and the district handles fly-tipping.</li>
-    </ul>
-  </section>
 
-  <section id="verify">
-    <h2>Verifying a fix</h2>
-    <p class="lede">The AI assists and never decides alone. Its answers are "likely resolved", "potentially unresolved" or "needs human review".</p>
+    <p>Before the report is saved, the app looks for an open report of the same type nearby and asks the person whether it's the same problem. If it is, their report is added to the existing one instead of creating a duplicate. We ask rather than merge automatically, because a wrong guess would hide a genuine second problem. We'd start with a distance of about 10 to 20 metres for potholes and 25 to 50 metres for other problems, then adjust once we see real reports.</p>
+    <p>The system then works out which council is responsible from the location and the type of problem. Location alone isn't always enough. In areas with two levels of council, the county usually looks after potholes and the district looks after fly-tipping. We'll confirm who covers what in the pilot area before relying on this.</p>
+    <p>It also suggests a category from the photo. If it isn't confident, the report is flagged for a person to look at.</p>
+
+    <h2 id="checking">Checking a fix</h2>
+    <p>When a council marks a report as cleared, we ask the person who reported it, and anyone who backed the report, whether it's really fixed. A new photo helps. A photo-comparison tool can look at the before and after pictures, but it only advises. It gives one of three answers: likely fixed, possibly not fixed, or needs a person to look.</p>
+
     <figure>
       <pre class="mermaid">
 sequenceDiagram
-  participant S as Authority staff
-  participant P as Platform
-  participant C as Citizens nearby
-  participant A as AI
-  S->>P: Mark cleared (optional after-photo)
-  P->>C: Ask reporter and supporters: is it fixed?
+  participant S as Council staff
+  participant P as The platform
+  participant C as Nearby residents
+  participant A as Photo check
+  S->>P: Marks the report cleared (optional after-photo)
+  P->>C: Asks the reporter and supporters: is it fixed?
   C->>P: Yes, or still there (with a new photo)
-  P->>A: Compare original and new photos
-  A-->>P: Likely resolved / unresolved / needs review, with confidence
+  P->>A: Compares the original and new photos
+  A-->>P: Likely fixed, possibly not, or needs a person
   alt Evidence agrees it is fixed
-    P->>P: Status becomes Verified
+    P->>P: Status becomes verified
   else Evidence says it is still there
-    P->>P: Status becomes Reopened
-    P->>S: Notify that the report was reopened
+    P->>P: Status becomes reopened
+    P->>S: Tells the council it was reopened
   else Unclear
-    P->>S: Queue for human review
+    P->>S: Asks a person to review
   end
       </pre>
-      <figcaption>Draft rule: Verified needs the authority's "cleared" plus at least one independent confirmation. Thresholds are an open decision (see Decisions).</figcaption>
+      <figcaption>Figure 3. How a fix gets checked.</figcaption>
     </figure>
-    <p>Reports that stay "Cleared" with nobody confirming them still count, but as unverified. That keeps the verification rate honest.</p>
-  </section>
 
-  <section id="flow">
-    <h2>How the data flows</h2>
+    <p>Our draft rule is that a report becomes verified when the council has said cleared and at least one independent confirmation agrees. If the evidence says the problem is still there, the report reopens and the council is told. If nobody responds, it stays as cleared but unverified, and is counted that way, so the verification figures stay honest. How many confirmations we need is one of the decisions that can wait.</p>
+
+    <h2 id="measuring">Measuring results</h2>
+    <p>Every change of stage is saved with the time it happened. That's what lets us work out the figures in your benchmarking example. For instance:</p>
+    <ul>
+      <li>The median time to clear a fly-tip, for each council.</li>
+      <li>The share of reports cleared within five days.</li>
+      <li>The share of cleared reports that were later verified.</li>
+      <li>How often a problem returns to the same spot, meaning a new report close to one that was already fixed.</li>
+    </ul>
+    <p>Hotspot maps and trends come later, once there's enough data for them to mean something.</p>
+
+    <h2 id="order">Order of work</h2>
+    <p>We'd build in stages, each on top of the one before.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Stage</th><th>What it adds</th><th>Hours</th><th>About how long</th></tr></thead>
+        <tbody>
+          <tr><td>Foundation</td><td>A new database in a UK or EU location, a fuller set of issue types (fly-tipping, potholes, graffiti, abandoned vehicles, damaged infrastructure), smaller photos, and the groundwork for recording each stage change.</td><td>8 to 16</td><td>1 to 1.5 weeks</td></tr>
+          <tr><td>Community</td><td>The "is this the same problem?" check, a count of people backing a report, and a public feed showing each report's progress.</td><td>12 to 24</td><td>1.5 to 2.5 weeks</td></tr>
+          <tr><td>Staff dashboard</td><td>Sign-in for staff, a list, map and filters for each council's area, and buttons to update a report's stage.</td><td>20 to 35</td><td>2 to 3.5 weeks</td></tr>
+          <tr><td>AI help</td><td>Suggested categories with a confidence level, checked by staff. Needs extra time to tune on real reports.</td><td>10 to 20</td><td>1 to 2 weeks</td></tr>
+          <tr><td>Routing and checking fixes</td><td>Automatic routing to the right council for the pilot area, requests to confirm a fix, and the verification rule.</td><td>25 to 45</td><td>2.5 to 4.5 weeks</td></tr>
+          <tr><td>Comparing councils</td><td>Public comparison pages. Needs months of real data first, so we haven't sized it.</td><td>Later</td><td>Later</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>The first three stages come to roughly 40 to 75 hours, or 4 to 7.5 weeks. With AI help it's 50 to 95 hours, or 5 to 9.5 weeks. These are rough guesses and could be out by half again either way. They assume about 10 hours a week on Resolve UK, because our time is shared with Celestial Companions. The routing stage also depends on a council taking part, so no number of hours can promise it.</p>
+
+    <figure>
+      <div class="chart">
+        <div class="wf" role="img" aria-label="Schedule in weeks at about 10 hours a week: Foundation weeks 1 to 2.5, Community weeks 2.5 to 4.5, Staff dashboard weeks 4.5 to 7.5, AI help weeks 7.5 to 9, Routing and checking fixes weeks 9 to 12.5, which also depends on a council.">
+          <div class="wf-corner">Week</div>
+          <div class="wf-weeks">
+            <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span>
+          </div>
+
+          <div class="wf-label">Foundation</div>
+          <div class="wf-track"><div class="wf-bar" style="grid-column: 1 / 4">1.5 wk</div></div>
+
+          <div class="wf-label">Community</div>
+          <div class="wf-track"><div class="wf-bar" style="grid-column: 4 / 8">2 wk</div></div>
+
+          <div class="wf-label">Staff dashboard</div>
+          <div class="wf-track"><div class="wf-bar" style="grid-column: 8 / 14">3 wk</div></div>
+
+          <div class="wf-label">AI help</div>
+          <div class="wf-track"><div class="wf-bar" style="grid-column: 14 / 17">1.5 wk</div></div>
+
+          <div class="wf-label">Routing and checking fixes<small>needs a council</small></div>
+          <div class="wf-track"><div class="wf-bar uncertain" style="grid-column: 17 / 24">3.5 wk</div></div>
+        </div>
+      </div>
+      <figcaption>Figure 4. The stages laid out over weeks, at about 10 hours a week. The dashed bar depends on finding a council. If Celestial Companions takes priority for a while, everything moves later.</figcaption>
+    </figure>
+
+    <h2 id="questions">Questions for Ms Kay</h2>
+    <p>Three questions would help us most.</p>
+    <ol class="questions">
+      <li>Who will check the dashboard at the start, and who marks a report as cleared: your team or the council's staff?
+        <span class="why">This tells us who needs a login.</span></li>
+      <li>How do you plan to approach a council, and do you have a contact or a way in?
+        <span class="why">Reports only get fixed if a council takes part.</span></li>
+      <li>Of East Anglia, Nottinghamshire and Huddersfield, which is easiest for you to visit and test in person?
+        <span class="why">We think Huddersfield may be simplest, because one council covers everything there, but we still need to check that. We'd like to hear what works for you.</span></li>
+    </ol>
+
+    <h3>Smaller decisions that can wait</h3>
+    <ul>
+      <li>Should photos appear publicly straight away, or be checked first? They can show faces and number plates.</li>
+      <li>Should people who report need an account, or is anonymous fine?</li>
+      <li>How many confirmations should it take to count a fix as verified?</li>
+      <li>How long should we keep reports and photos?</li>
+      <li>If Resolve UK and Celestial Companions compete for time, which comes first?</li>
+    </ul>
+
+    <h2 id="appendix">Technical appendix</h2>
+    <p>This part is for whoever builds or takes over the system. Everyone else can skip it.</p>
+
+    <h3>How the pieces connect</h3>
     <figure>
       <pre class="mermaid">
 flowchart TB
-  subgraph Device["Citizen phone or browser"]
+  subgraph Device["Resident's phone or browser"]
     PWA["Resolve UK app"]
   end
   subgraph Host["Vercel"]
-    Static["Static app files only"]
+    Static["App files only"]
   end
   subgraph Supa["Supabase, London region"]
     Auth["Auth: staff sign-in"]
@@ -599,13 +272,12 @@ flowchart TB
   Fn -->|"photo + category question"| AI
   Fn -->|"authority + suggestion"| DB
       </pre>
-      <figcaption>The AI key lives only inside the Edge Function, never in the browser. Vercel serves the app and holds no data.</figcaption>
+      <figcaption>Figure 5. Where the data lives and which parts talk to each other.</figcaption>
     </figure>
-  </section>
+    <p>The AI key stays inside a server-side function and never reaches the browser. Vercel only serves the app's files and holds no data.</p>
 
-  <section id="model">
-    <h2>Data model</h2>
-    <p class="lede">The key change from the prototype: a report's history is a list of entries that only ever grow. The current status becomes a shortcut copied from the latest entry, not the source of truth.</p>
+    <h3>Data model</h3>
+    <p>The main change from the prototype is that a report's history becomes a list of entries that only ever grows. The current status is then a shortcut copied from the latest entry, not the source of truth.</p>
     <figure>
       <pre class="mermaid">
 erDiagram
@@ -666,171 +338,134 @@ erDiagram
     text display_name
   }
       </pre>
-      <figcaption>Photos are stored by path, not full URL, so moving projects never breaks a link. Location accuracy is kept so the nearby check can allow for GPS error.</figcaption>
+      <figcaption>Figure 6. The tables and how they relate. Photos are stored by path, not full URL, so moving to a new project never breaks a link. Location accuracy is kept so the nearby check can allow for GPS error.</figcaption>
     </figure>
+    <p>Routing picks the authority whose boundary contains the point and whose responsibilities include the issue type. That handles areas where the county and district split the work. Later additions, not in this stage, are an <code>area_follows</code> table ("tell me about problems within a mile") and a cost per report.</p>
 
-    <h3>How Kay's numbers come out of it</h3>
-    <div class="table-wrap">
-      <table>
-        <thead><tr><th>Measure</th><th>Where it comes from</th></tr></thead>
-        <tbody>
-          <tr><td>Median time to clear</td><td class="muted">The "Cleared" entry's time minus the report's created time, per authority and issue type.</td></tr>
-          <tr><td>% cleared within 5 days</td><td class="muted">Same calculation with a threshold.</td></tr>
-          <tr><td>Reports verified as resolved</td><td class="muted">Share of cleared reports that reach "Verified".</td></tr>
-          <tr><td>Repeat incidents at same location</td><td class="muted">A new report within a set distance of a verified one, inside a set time. Worked out by a location query, no extra field.</td></tr>
-          <tr><td>Hotspots</td><td class="muted">Density of reports by location over time. Later, once there is enough data.</td></tr>
-        </tbody>
-      </table>
-    </div>
-    <p>Later additions, not in this phase: <code>area_follows</code> ("tell me about problems within 1 mile") and a cost field per report.</p>
-  </section>
-
-  <section id="access">
-    <h2>Who can see and change what</h2>
+    <h3>Who can see and change what</h3>
     <div class="table-wrap">
       <table>
         <thead><tr><th>Who</th><th>Reports</th><th>History</th><th>Photos</th></tr></thead>
         <tbody>
-          <tr><td>Public</td><td class="muted">Read. Create with category, description, location and photo only. Cannot set status or authority.</td><td class="muted">Read the status timeline.</td><td class="muted">Read (decision needed, see below).</td></tr>
-          <tr><td>Authority staff</td><td class="muted">Read reports for their own authority.</td><td class="muted">Add entries for their own authority.</td><td class="muted">Upload evidence photos.</td></tr>
-          <tr><td>Resolve admin</td><td class="muted">Everything, plus manage authorities and issue types.</td><td class="muted">Everything.</td><td class="muted">Everything.</td></tr>
-          <tr><td>Nobody</td><td class="muted">Deletes reports.</td><td class="muted">Edits or deletes past entries (admin exceptions only).</td><td class="muted">n/a</td></tr>
+          <tr><td>Public</td><td>Read. Create with type, description, location and photo only. Cannot set status or authority.</td><td>Read the status timeline.</td><td>Read (decision pending).</td></tr>
+          <tr><td>Council staff</td><td>Read reports for their own authority.</td><td>Add entries for their own authority.</td><td>Upload evidence photos.</td></tr>
+          <tr><td>Resolve admin</td><td>Everything, plus manage authorities and issue types.</td><td>Everything.</td><td>Everything.</td></tr>
+          <tr><td>Nobody</td><td>Deletes reports.</td><td>Edits or deletes past entries (admin exceptions only).</td><td>Not applicable.</td></tr>
         </tbody>
       </table>
     </div>
-    <p>Enforced in the database itself (row-level security), not only in the app, so a bug in the app can't quietly open data up.</p>
-  </section>
-
-  <section id="plan">
-    <h2>Build plan</h2>
-    <div class="table-wrap">
-      <table>
-        <thead><tr><th>Phase</th><th>What gets built</th><th>Focused hours</th><th>At ~10 h/week</th></tr></thead>
-        <tbody>
-          <tr><td>2A Foundation</td><td class="muted">New London project under the project's own organisation. Schema kept as migration files in the repo. Five issue types. Photo shrinking and paths. Location accuracy recorded.</td><td class="muted">8–16</td><td class="muted">1–1.5 weeks</td></tr>
-          <tr><td>2B Community layer</td><td class="muted">Nearby "same issue?" check, support counts, public feed with each report's status timeline.</td><td class="muted">12–24</td><td class="muted">1.5–2.5 weeks</td></tr>
-          <tr><td>2C Staff dashboard</td><td class="muted">Staff sign-in and roles, list, map and filters per authority, status actions that write history.</td><td class="muted">20–35</td><td class="muted">2–3.5 weeks</td></tr>
-          <tr><td>2D AI assist</td><td class="muted">Category suggestion with confidence, run server-side, confirmed by staff. Extra time needed to tune on real reports.</td><td class="muted">10–20</td><td class="muted">1–2 weeks</td></tr>
-          <tr><td>3 Routing and verification</td><td class="muted">Boundary-based routing for the pilot area, verification requests, the evidence rule.</td><td class="muted">25–45</td><td class="muted">2.5–4.5 weeks</td></tr>
-          <tr><td>4 Benchmarking</td><td class="muted">Comparison views and public pages. Needs months of real data first, so it is not sized yet.</td><td class="muted">Later</td><td class="muted">Later</td></tr>
-        </tbody>
-      </table>
-    </div>
-    <p><strong>Core (2A to 2C):</strong> about 40–75 hours, or 4–7.5 weeks. <strong>With AI assist (2D):</strong> about 50–95 hours, or 5–9.5 weeks. Phase 3 also depends on a partner council, which no hour count can promise.</p>
-    <figure>
-      <div class="table-wrap">
-        <div class="wf" role="img" aria-label="Schedule in weeks at about 10 hours a week: 2A weeks 1 to 2.5, 2B weeks 2.5 to 4.5, 2C weeks 4.5 to 7.5, 2D weeks 7.5 to 9, phase 3 weeks 9 to 12.5, which also needs a partner council.">
-          <div class="wf-label wf-corner">Week</div>
-          <div class="wf-weeks">
-            <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span>
-          </div>
-
-          <div class="wf-label">2A Foundation</div>
-          <div class="wf-track"><div class="wf-bar" style="grid-column: 1 / 4">1.5 wk</div></div>
-
-          <div class="wf-label">2B Community layer</div>
-          <div class="wf-track"><div class="wf-bar" style="grid-column: 4 / 8">2 wk</div></div>
-
-          <div class="wf-label">2C Staff dashboard</div>
-          <div class="wf-track"><div class="wf-bar" style="grid-column: 8 / 14">3 wk</div></div>
-
-          <div class="wf-label">2D AI assist</div>
-          <div class="wf-track"><div class="wf-bar" style="grid-column: 14 / 17">1.5 wk</div></div>
-
-          <div class="wf-label">3 Routing and verification<small>needs a partner council</small></div>
-          <div class="wf-track"><div class="wf-bar council" style="grid-column: 17 / 24">3.5 wk</div></div>
-        </div>
-      </div>
-      <figcaption>Each bar is the middle of that phase's estimate at about 10 hours a week, rounded to half a week. Each phase builds on the one before. If Celestial Companions takes priority for a stretch, everything shifts right.</figcaption>
-    </figure>
+    <p>These rules are enforced in the database itself (row-level security), not only in the app, so a bug in the app can't quietly expose data.</p>
 
     <h3>What changes in the current prototype</h3>
-    <ul class="plain">
-      <li>Issue types grow from three to five: fly-tipping, potholes, graffiti, abandoned vehicles, damaged infrastructure.</li>
+    <ul>
+      <li>Issue types grow from three to five: fly-tipping, potholes, graffiti, abandoned vehicles and damaged infrastructure.</li>
       <li>The form records GPS accuracy, and photos are shrunk before upload and stored by path.</li>
-      <li>Submitting also writes the first history entry. The list shows the status timeline instead of a single word.</li>
+      <li>Submitting also writes the first history entry, and the list shows the status timeline instead of a single word.</li>
       <li>New: staff sign-in and the dashboard. The Supabase keys move to the new London project.</li>
     </ul>
-  </section>
 
-  <section id="decisions">
-    <h2>Decisions needed</h2>
-    <ul class="plain">
-      <li><strong>Who runs the dashboard first?</strong> The Resolve team acting for councils, or council staff. The design supports both, but it changes who gets accounts. Blocks 2C.</li>
-      <li><strong>Are photos public straight away, or checked first?</strong> Photos can show faces and number plates. Blocks 2B.</li>
-      <li><strong>Anonymous or accounts for citizens?</strong> A device token is simpler but easier to game when counting "same issue" confirmations. Affects 2B.</li>
-      <li><strong>Verification thresholds.</strong> How many confirmations, how confident the AI must be, and what happens if nobody responds. Affects 3.</li>
-      <li><strong>Retention.</strong> How long reports and photos are kept. Needs the compliance advice mentioned earlier. Affects 2A.</li>
-      <li><strong>Pilot authority.</strong> Which council, and which responsibilities it covers. Huddersfield (Kirklees) was suggested as the simplest, subject to checking. Affects 3.</li>
-      <li><strong>Which project comes first.</strong> Resolve UK or Celestial Companions. Sets the real timeline.</li>
-    </ul>
-  </section>
-
-  <section id="ask">
-    <h2>Questions for Ms Kay</h2>
-    <p class="lede">These three can only be answered by Ms Kay, and each one decides what gets built next.</p>
-    <ul class="questions">
-      <li>
-        <span class="qmark">?</span>
-        <span class="question-text">
-          <strong>Who operates the dashboard at the start, and who marks a report "cleared" during a pilot?</strong>
-          <span>Ms Kay said the dashboard is checked manually to begin with. It isn't clear whether that means the Resolve team, passing reports on to a council and updating the status themselves, or council staff signing in directly. The answer decides who gets accounts and who is trusted to say a job is done.</span>
-          <span class="unblocks">Unblocks: 2C staff dashboard</span>
-        </span>
-      </li>
-      <li>
-        <span class="qmark">?</span>
-        <span class="question-text">
-          <strong>With no existing council contact, how will a partner council be approached, and does Ms Kay have a route in?</strong>
-          <span>The loop only closes if an authority actually uses the system. Without a council taking part, every report stays at "Reported". Knowing whether there is a personal or professional way in also affects whether we build towards a demonstration first or a live pilot.</span>
-          <span class="unblocks">Unblocks: pilot planning and phase 3</span>
-        </span>
-      </li>
-      <li>
-        <span class="qmark">?</span>
-        <span class="question-text">
-          <strong>Which of the three areas (East Anglia, Nottinghamshire or Huddersfield) is best for Ms Kay to visit and test in person?</strong>
-          <span>Testing on the ground, with real fly-tipping or potholes, shows whether the location pin, the nearby check and the photo flow hold up away from a desk. Huddersfield (Kirklees) looks simplest for routing, subject to checking, and being able to test in person is a fair tiebreaker.</span>
-          <span class="unblocks">Unblocks: choosing the pilot authority</span>
-        </span>
-      </li>
-    </ul>
-  </section>
-
-  <section id="handover">
-    <h2>Handover checklist</h2>
-    <ul class="plain">
+    <h3>Handover checklist</h3>
+    <ul>
       <li>Accounts (Supabase, Vercel, GitHub) sit in organisations that can be handed over by adding the new owner, not by sharing a password. Two-factor sign-in is on.</li>
-      <li>The database structure lives in the repo as migration files, so the whole database can be recreated in any region or account.</li>
+      <li>The database structure lives in the repository as migration files, so the whole database can be recreated in any region or account.</li>
       <li>The README lists every environment variable, how to deploy, and how to rotate keys. Secrets live in each platform's secret store, never in chat or email.</li>
       <li>Backups are decided on purpose. The free tier may not include them, so confirm before real data arrives.</li>
-      <li>A list of every third-party service used, with what it costs and who pays.</li>
+      <li>There is a list of every third-party service used, with what it costs and who pays.</li>
     </ul>
-  </section>
 
-  <footer>
-    <span>Resolve UK: citizen environmental reporting</span>
-    <span>Draft v1 · 19 Sept 2026</span>
-  </footer>
+  </main>
+
+  <footer class="doc">Resolve UK Blueprint &middot; Draft 1 &middot; 19 September 2026</footer>
 
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/mermaid@11.17.2/dist/mermaid.min.js"></script>
 <script>
   (function () {
-    var mq = window.matchMedia('(prefers-color-scheme: dark)');
+    var palettes = {
+      light: {
+        darkMode: false,
+        background: '#fafaf7',
+        fontFamily: "'Archivo', system-ui, sans-serif",
+        primaryColor: '#eef3ee',
+        primaryTextColor: '#1d221f',
+        primaryBorderColor: '#155b34',
+        textColor: '#1d221f',
+        lineColor: '#5f6862',
+        secondaryColor: '#f0f2ec',
+        tertiaryColor: '#fafaf7',
+        clusterBkg: '#f0f2ec',
+        clusterBorder: '#cfd1c8',
+        edgeLabelBackground: '#fafaf7',
+        actorBkg: '#eef3ee',
+        actorBorder: '#155b34',
+        actorTextColor: '#1d221f',
+        actorLineColor: '#9aa39c',
+        signalColor: '#5f6862',
+        signalTextColor: '#1d221f',
+        labelBoxBkgColor: '#eef3ee',
+        labelBoxBorderColor: '#155b34',
+        labelTextColor: '#1d221f',
+        loopTextColor: '#1d221f',
+        noteBkgColor: '#f0f2ec',
+        noteTextColor: '#1d221f',
+        noteBorderColor: '#cfd1c8',
+        attributeBackgroundColorOdd: '#fafaf7',
+        attributeBackgroundColorEven: '#f0f2ec'
+      },
+      dark: {
+        darkMode: true,
+        background: '#151716',
+        fontFamily: "'Archivo', system-ui, sans-serif",
+        primaryColor: '#1f3327',
+        primaryTextColor: '#e9ece9',
+        primaryBorderColor: '#5cc08a',
+        textColor: '#e9ece9',
+        lineColor: '#9aa39c',
+        secondaryColor: '#1e2220',
+        tertiaryColor: '#151716',
+        clusterBkg: '#1e2220',
+        clusterBorder: '#3a403d',
+        edgeLabelBackground: '#151716',
+        actorBkg: '#1f3327',
+        actorBorder: '#5cc08a',
+        actorTextColor: '#e9ece9',
+        actorLineColor: '#6b746d',
+        signalColor: '#9aa39c',
+        signalTextColor: '#e9ece9',
+        labelBoxBkgColor: '#1f3327',
+        labelBoxBorderColor: '#5cc08a',
+        labelTextColor: '#e9ece9',
+        loopTextColor: '#e9ece9',
+        noteBkgColor: '#1e2220',
+        noteTextColor: '#e9ece9',
+        noteBorderColor: '#3a403d',
+        attributeBackgroundColorOdd: '#151716',
+        attributeBackgroundColorEven: '#1e2220'
+      }
+    };
+
     var blocks = Array.prototype.slice.call(document.querySelectorAll('pre.mermaid'));
-    var sources = blocks.map(function (el) { return el.textContent; });
+    var sources = blocks.map(function (block) { return block.textContent; });
+
     function render() {
-      mermaid.initialize({ startOnLoad: false, theme: mq.matches ? 'dark' : 'default', securityLevel: 'strict' });
-      blocks.forEach(function (el, i) {
-        el.removeAttribute('data-processed');
-        el.textContent = sources[i];
+      mermaid.initialize({
+        startOnLoad: false,
+        theme: 'base',
+        securityLevel: 'strict',
+        themeVariables: palettes[window.getTheme()]
+      });
+      blocks.forEach(function (block, i) {
+        block.removeAttribute('data-processed');
+        block.textContent = sources[i];
       });
       mermaid.run({ nodes: blocks });
     }
-    render();
-    mq.addEventListener('change', render);
+
+    // Draw after the web fonts are ready, otherwise text is measured in a fallback font and gets clipped.
+    var fontsReady = document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve();
+    fontsReady.then(render);
+    document.addEventListener('themechange', render);
   })();
 </script>
 </body>

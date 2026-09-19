@@ -15,7 +15,12 @@ separate repository.
 |---|---|
 | `/` | Index of all reports, newest first |
 | `/week-1/` | Week 1 status report: what shipped, the development plan, risks, and questions |
-| `/blueprint/` | Draft system plan: lifecycle, process flows, data model, access rules, build phases, open decisions |
+| `/blueprint/` | Draft system plan: how a report moves, order of work, questions for Ms Kay, and a technical appendix with the data model |
+| `/assets/` | Shared stylesheet and script used by every page |
+
+Every page has a light/dark button. The default follows the system setting, and
+a manual choice is only kept while moving between pages, so a refresh returns
+to the system setting.
 
 ## Hosting
 
@@ -27,8 +32,8 @@ from a CDN, so it needs an internet connection to draw its diagrams.
 ## Adding a report
 
 1. Copy an existing folder (for example `week-1/`) and rename it.
-2. Edit its `index.html`.
-3. Add a row for it near the top of the root `index.html`.
+2. Edit its `index.html`. The page links to `../assets/site.css` and `../assets/site.js`, so keep it one folder deep.
+3. Add an entry for it to the root `index.html`.
 
 ## License
 
